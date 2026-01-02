@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route,useLocation  } from 'react-router-dom';
 import Home from '../pages/Home/Home';
 // import Login from '../pages/Login/Login';
-import {Nav } from '../comportnents'
+import {Nav } from '../components'
 
 export default function AppRoutes() {
   let location = useLocation();

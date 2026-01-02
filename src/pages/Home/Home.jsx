@@ -1,56 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import {Search,Settings2} from 'lucide-react'
 const Home = () => {
-  const [products, setProducts] = useState([]); // Để lưu dữ liệu sản phẩm từ API
-
-  // Gọi API khi component được render
-  useEffect(() => {
-    axios.get("https://dummyjson.com/products")
-      .then(res => {
-        console.log(res.data); // Log dữ liệu trả về từ API
-        setProducts(res.data.products); // Lưu dữ liệu vào state 'products'
-      })
-      .catch(err => console.error("Error fetching data:", err));
-  }, []);
-
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif' }}>
-      {/* HEADER */}
-      
-
-      <div style={{ fontWeight: 'bold', fontSize: '1.5rem', textAlign: 'center', color: 'red' }}>FILE placeholder thôi nha!</div>
-
-      {/* SEARCH BAR */}
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <input
-          type="text"
-          placeholder="Tìm kiếm sản phẩm..."
-          style={{ width: '60%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-        />
+    <div className="flex flex-col items-center">
+    <div className='banner-search relative'>
+      <div className='container-fluid bg-slate-300 h-[400px] w-screen mt-[100px]'></div>
+      <div className='search h-12 w-[80%] border border-black absolute bottom-[-20px] left-[50%] translate-x-[-50%]'>
+        <input type='text' placeholder='Tìm kiếm tại đây...' className='h-full w-full p-2'></input>
+        <div className='absolute top-2 right-5 flex gap-3'>
+          <Settings2 className='pt-1'/>
+          <button className='color-black btn bg-gray-400 h-full w-14 flex justify-center rounded-[5px] py-1'><Search/></button>
+          </div>
       </div>
-
-      {/* PRODUCT GRID */}
-      <main style={{ padding: '20px' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-          gap: '20px'
-        }}>
-          {products.length === 0 ? (
-            <p>Loading products...</p> // Hiển thị thông báo khi chưa có sản phẩm
-          ) : (
-            products.map(product => (
-              <div key={product.id} style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px', textAlign: 'center' }}>
-                <div style={{ height: '150px', background: '#eee', marginBottom: '10px' }}>Ảnh sản phẩm</div>
-                <h3>{product.name}</h3>
-                <p style={{ color: 'red', fontWeight: 'bold' }}>{product.price}</p>
-                <button style={{ padding: '5px 10px', cursor: 'pointer' }}>Thêm vào giỏ</button>
-              </div>
-            ))
-          )}
-        </div>
-      </main>
+    </div>
+    <div className="underline w-[50%] h-[2px] bg-black mt-10"></div>
+    <h1 className='font-bold text-4xl pt-4'>Sản phẩm</h1>
+    <div className='product-list grid md:grid-cols-4 grid-cols-1 gap-2 pt-3'>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+    </div>
+      <div className="underline w-[50%] h-[2px] bg-black mt-10"></div>
+    <h1 className='font-bold text-4xl pt-4'>Đề xuất</h1>
+ <div className='product-list grid md:grid-cols-4 grid-cols-1 gap-2 pt-3'>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+      <div className='h-[200px] w-[250px] bg-black'></div>
+    </div>
+    <div className='h-20'></div>
     </div>
   );
 };
