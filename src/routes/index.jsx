@@ -1,19 +1,20 @@
 import { BrowserRouter, Routes, Route,useLocation  } from 'react-router-dom';
 import Home from '../pages/Home/Home';
 // import Login from '../pages/Login/Login';
-import {Nav } from '../components'
+import {Nav,Footer } from '../components'
 
 export default function AppRoutes() {
   let location = useLocation();
-  let hidenNavbar1 = location.pathname === "/login";
-  let hidenNavbar2 = location.pathname === "/register";
+  let hiden1 = location.pathname === "/login";
+  let hiden2 = location.pathname === "/register";
   return (
       <>
-    {!hidenNavbar1 && !hidenNavbar2 && <Nav />}
+    {!hiden1 && !hiden2 && <Nav />}
       <Routes>
         <Route path="/" element={<Home />} />
         {/* <Route path="/login" element={<Login />} /> */}
       </Routes>
+      {!hiden1 && !hiden2 && <Footer />}
       </>
   );
 }
