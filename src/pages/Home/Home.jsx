@@ -1,41 +1,31 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {Search,Settings2} from 'lucide-react'
 import bannerIMG from '../../assets/banner.jpg'
-
-let products = [
-  {
-    name: "Giày NIKE",
-    price: 10000000,
-    description: "Sản phẩm giày NIKE chính hãng 100%",
-    quantity: 10,
-    image_url: "https://imgs.search.brave.com/nSjzY_yAgYrwPEzNJy8I4bwMCj8G6L8kF-zYJBDBBJw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudW5zcGxhc2gu/Y29tL3Bob3RvLTE1/NDIyOTEwMjYtN2Vl/YzI2NGMyN2ZmP2l4/bGliPXJiLTQuMS4w/Jml4aWQ9TTN3eE1q/QTNmREI4TUh4elpX/RnlZMmg4TW54OGJt/bHJaWHhsYm53d2ZI/d3dmSHg4TUE9PSZm/bT1qcGcmcT02MCZ3/PTMwMDA"
-  },
-  {
-    name: "Giày ADIDAS",
-    price: 10000000,
-    description: "Sản phẩm giày ADIDAS chính hãng 99%",
-    quantity: 10,
-    image_url: "https://imgs.search.brave.com/6980T_yJvvDlRPkZj-EF0rV2se8YpQqRl-96MEBMXf0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9icmFu/ZC5hc3NldHMuYWRp/ZGFzLmNvbS9pbWFn/ZS91cGxvYWQvZl9h/dXRvLHFfYXV0bzpi/ZXN0LGZsX2xvc3N5/L2lmX3dfZ3RfODAw/LHdfODAwL29yaWdf/c3MyNl9hZGlzdGFy/X2NvbnRyb2xfNV90/Y2NfMDRfZF9lMzdj/MWI2ZGExLmpwZw"
-  },
-  {
-    name: "Giày NIKE",
-    price: 10000000,
-    description: "Sản phẩm giày NIKE chính hãng 100%",
-    quantity: 10,
-    image_url: "https://imgs.search.brave.com/nSjzY_yAgYrwPEzNJy8I4bwMCj8G6L8kF-zYJBDBBJw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudW5zcGxhc2gu/Y29tL3Bob3RvLTE1/NDIyOTEwMjYtN2Vl/YzI2NGMyN2ZmP2l4/bGliPXJiLTQuMS4w/Jml4aWQ9TTN3eE1q/QTNmREI4TUh4elpX/RnlZMmg4TW54OGJt/bHJaWHhsYm53d2ZI/d3dmSHg4TUE9PSZm/bT1qcGcmcT02MCZ3/PTMwMDA"
-  },
-  {
-    name: "Giày ADIDAS",
-    price: 10000000,
-    description: "Sản phẩm giày ADIDAS chính hãng 99%",
-    quantity: 10,
-    image_url: "https://imgs.search.brave.com/6980T_yJvvDlRPkZj-EF0rV2se8YpQqRl-96MEBMXf0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9icmFu/ZC5hc3NldHMuYWRp/ZGFzLmNvbS9pbWFn/ZS91cGxvYWQvZl9h/dXRvLHFfYXV0bzpi/ZXN0LGZsX2xvc3N5/L2lmX3dfZ3RfODAw/LHdfODAwL29yaWdf/c3MyNl9hZGlzdGFy/X2NvbnRyb2xfNV90/Y2NfMDRfZF9lMzdj/MWI2ZGExLmpwZw"
-  },
-]
-
+import { useState,useEffect } from 'react';
+import {Card} from '../../components'
 
 const Home = () => {
+  
+const [products,setProducts] = useState([])
+const [isLoading,setLoading] = useState(true)
+const [isError,setError] = useState(false)
+
+useEffect(()=> {
+  const fetchProducts = async () => {
+    try{
+      const res = await axios.get("https://fakestoreapi.com/products");
+      setProducts(res.data)
+    }catch(e){
+      setError(e.message)
+    } finally{
+      setLoading(false)
+    }
+  }
+  fetchProducts();
+},[])
+
+  if(isLoading) return <div>Loading...</div>
+  if(isError) return <div>Error: {isError}</div>
   return (
     <div className="flex flex-col items-center">
     <div className='banner-search relative'>
@@ -55,18 +45,7 @@ const Home = () => {
       <h1 className='font-bold text-4xl pt-4'>Sản phẩm</h1>
     <div className='product-list grid md:grid-cols-4 grid-cols-1 gap-2 pt-3'>
       {products?.map((item,index) => (
-        <div className='flex flex-col items-center'>
-          <div className='h-[200px] w-[250px] bg-black relative'>
-            <img src={item.image_url} alt={item.name} className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'></img>
-            <div className='bg-white/50 w-full h-[30%] absolute bottom-0 flex items-center justify-center shadow'>
-              <div className='w-12 h-12 bg-black opacity-1'>
-                <img src={item.image_url} alt={item.name} className='h-full w-full object-cover'/>
-              </div>
-            </div>
-          </div>
-          <div className='mt-2'>{item?.name}</div>
-          <b>{item.price.toLocaleString('vi-VN') + 'đ'}</b>
-        </div>
+        <Card key={index} title={item.title} image = {item.image} price = {item.price}></Card>
       ))
       }
     </div>
@@ -77,18 +56,7 @@ const Home = () => {
       <h1 className='font-bold text-4xl pt-4'>Đề xuất</h1>
     <div className='product-list grid md:grid-cols-4 grid-cols-1 gap-2 pt-3'>
       {products?.map((item,index) => (
-        <div className='flex flex-col items-center'>
-          <div className='h-[200px] w-[250px] bg-black relative'>
-            <img src={item.image_url} alt={item.name} className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'></img>
-            <div className='bg-white/50 w-full h-[30%] absolute bottom-0 flex items-center justify-center shadow'>
-              <div className='w-12 h-12 bg-black opacity-1'>
-                <img src={item.image_url} alt={item.name} className='h-full w-full object-cover'/>
-              </div>
-            </div>
-          </div>
-          <div className='mt-2'>{item?.name}</div>
-          <b>{item.price.toLocaleString('vi-VN')+ 'đ'}</b>
-        </div>
+        <Card key={index} title={item.title} image = {item.image} price = {item.price}></Card>
       ))
       }
     </div>
