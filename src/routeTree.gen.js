@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as appRouteRouteImport } from './routes/(app)/route'
 import { Route as appIndexRouteImport } from './routes/(app)/index'
-import { Route as appProductsIdRouteImport } from './routes/(app)/products/$id'
+import { Route as appProductIdRouteImport } from './routes/(app)/product/$id'
 
 const appRouteRoute = appRouteRouteImport.update({
   id: '/(app)',
@@ -22,15 +22,15 @@ const appIndexRoute = appIndexRouteImport.update({
   path: '/',
   getParentRoute: () => appRouteRoute,
 })
-const appProductsIdRoute = appProductsIdRouteImport.update({
-  id: '/products/$id',
-  path: '/products/$id',
+const appProductIdRoute = appProductIdRouteImport.update({
+  id: '/product/$id',
+  path: '/product/$id',
   getParentRoute: () => appRouteRoute,
 })
 
 const appRouteRouteChildren = {
   appIndexRoute: appIndexRoute,
-  appProductsIdRoute: appProductsIdRoute,
+  appProductIdRoute: appProductIdRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(

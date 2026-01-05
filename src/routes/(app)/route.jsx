@@ -1,5 +1,4 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
-import { Navbar } from '@/components';
 
 export const Route = createFileRoute('/(app)')({
   component: RouteComponent,
@@ -8,7 +7,8 @@ export const Route = createFileRoute('/(app)')({
 function RouteComponent() {
   return (
     <>
-      <Navbar />
+      {/* design lại navbar */}
+      {/* <Navbar /> */}
       <Outlet />
     </>
   );

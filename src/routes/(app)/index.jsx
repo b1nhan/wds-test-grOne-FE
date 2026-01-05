@@ -1,14 +1,21 @@
 import { createFileRoute } from '@tanstack/react-router';
 import axios from 'axios';
-import bannerIMG from '@/assets/banner.jpg';
-import { Search, Settings2 } from 'lucide-react';
-import { Card } from '@/components';
+import ShoeHeader from '@/assets/shoe-header.png';
+import { SearchIcon, Settings2Icon, ShoppingBagIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ProductCard } from '@/components';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@/components/ui/input-group';
 
 export const Route = createFileRoute('/(app)/')({
   component: RouteComponent,
   loader: async () => {
     const products = await axios
-      .get('https://dummyjson.com/products')
+      .get('https://dummyjson.com/products/category/mens-shoes')
       .then((res) => res.data.products);
 
     return { products };
@@ -19,64 +26,61 @@ function RouteComponent() {
   const { products } = Route.useLoaderData();
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="banner-search relative">
-        <div className="container-fluid mt-[100px] h-[500px] w-screen overflow-hidden bg-slate-300">
+    <>
+      <section className="relative overflow-hidden bg-black text-white">
+        <div className="container mx-auto flex h-160 items-stretch gap-16 px-4">
+          <div className="flex max-w-[48ch] flex-1 flex-col justify-center gap-4">
+            <h1 className="text-4xl leading-12 font-bold">
+              Nâng tầm bước chân, khẳng định bản sắc.
+            </h1>
+
+            <p className="text-muted-foreground">
+              Tuyển tập những thiết kế dẫn đầu xu hướng, giúp bạn định hình
+              phong cách cá nhân độc bản trong mọi sự kiện.
+            </p>
+
+            <div className="mt-4 flex items-center gap-2">
+              <Button className="dark" size="lg">
+                <ShoppingBagIcon />
+                Mua ngay
+              </Button>
+            </div>
+          </div>
+
           <img
-            src={bannerIMG}
-            alt="banner"
-            className="h-full w-full object-cover"
+            src={ShoeHeader}
+            alt="shoe header"
+            className="ml-auto w-160 object-contain object-center"
           />
         </div>
-        <div className="search absolute bottom-[-20px] left-[50%] h-12 w-[80%] translate-x-[-50%] border border-black">
-          <input
-            type="text"
-            placeholder="Tìm kiếm tại đây..."
-            className="h-full w-full p-2"
-          ></input>
-          <div className="absolute top-2 right-5 flex gap-3">
-            <Settings2 className="pt-1" />
-            <button className="color-black btn flex h-full w-14 justify-center rounded-[5px] bg-gray-400 py-1">
-              <Search />
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="products-container flex flex-col items-center">
-        <div className="mt-10 h-[2px] w-[50%] bg-black underline"></div>
-        <h1 className="pt-4 text-4xl font-bold">Sản phẩm</h1>
-        <div className="product-list grid grid-cols-1 gap-2 pt-3 md:grid-cols-4">
-          {products.map((item, index) => (
-            <Card
-              key={index}
-              title={item.title}
-              image={item.image}
-              price={item.price}
-            ></Card>
+      </section>
+
+      <section className="container mx-auto flex flex-col items-center px-4 py-16">
+        <InputGroup className="max-w-xl rounded-full px-2 py-6">
+          <InputGroupInput type="text" placeholder="Tìm kiếm" />
+          <InputGroupAddon>
+            <SearchIcon />
+          </InputGroupAddon>
+          <InputGroupAddon align="end">
+            <InputGroupButton
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+            >
+              <Settings2Icon />
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </section>
+
+      <section className="container mx-auto flex flex-col gap-8 px-4 pb-32">
+        <h1 className="text-2xl font-semibold">Hàng mới về</h1>
+        <div className="grid grid-cols-4 gap-8">
+          {products.slice(0, 4).map((product) => (
+            <ProductCard product={product} />
           ))}
         </div>
-        <button className="mt-5 w-24 rounded-[5px] border border-black bg-gray-200 p-2 hover:bg-green-200">
-          Xem thêm
-        </button>
-      </div>
-      <div className="products-container flex flex-col items-center">
-        <div className="mt-10 h-[2px] w-[50%] bg-black underline"></div>
-        <h1 className="pt-4 text-4xl font-bold">Đề xuất</h1>
-        <div className="product-list grid grid-cols-1 gap-2 pt-3 md:grid-cols-4">
-          {products.map((item, index) => (
-            <Card
-              key={index}
-              title={item.title}
-              image={item.image}
-              price={item.price}
-            ></Card>
-          ))}
-        </div>
-        <button className="mt-5 w-24 rounded-[5px] border border-black bg-gray-200 p-2 hover:bg-green-200">
-          Xem thêm
-        </button>
-      </div>
-      <div className="h-10"></div>
-    </div>
+      </section>
+    </>
   );
 }

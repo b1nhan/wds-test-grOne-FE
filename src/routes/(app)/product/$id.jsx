@@ -6,12 +6,12 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { currencyFormatter } from '@/lib/utils';
+import { convertToVND } from '@/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
 import axios from 'axios';
 import { ShoppingCartIcon } from 'lucide-react';
 
-export const Route = createFileRoute('/(app)/products/$id')({
+export const Route = createFileRoute('/(app)/product/$id')({
   component: RouteComponent,
   loader: async ({ params }) => {
     const product = await axios
@@ -27,7 +27,7 @@ function RouteComponent() {
   return (
     <>
       <header className="container mx-auto mt-16 grid gap-16 px-4 md:grid-cols-2">
-        <figure className="aspect-square w-full max-w-2xl rounded-md border bg-accent object-cover p-32">
+        <figure className="bg-accent aspect-square w-full max-w-2xl rounded-md border object-cover p-32">
           <img
             src={product.thumbnail}
             alt={product.title}
@@ -38,17 +38,16 @@ function RouteComponent() {
         <form className="flex max-w-[50ch] flex-1 flex-col gap-4">
           <h1 className="text-2xl">{product.title}</h1>
 
-          <div className="flex items-center gap-4">
-            <p className="text-2xl font-bold">
-              {currencyFormatter.format(product.price)}
-            </p>
+          <p className="inline-flex items-center gap-4 text-2xl font-bold">
+            {convertToVND(product.price)}
 
-            <span className="text-muted-foreground">•</span>
-
-            <p className="text-muted-foreground">
-              {product.stock} sản phẩm có sẵn
-            </p>
-          </div>
+            <span className="text-muted-foreground text-base font-normal">
+              •
+            </span>
+            <span className="text-muted-foreground text-base font-normal">
+              {product.stock} trong kho
+            </span>
+          </p>
 
           <p className="text-muted-foreground">{product.description}</p>
 
