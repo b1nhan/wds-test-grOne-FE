@@ -1,4 +1,5 @@
 import QuantityInput from '@/components/QuantityInput';
+import { productAPI } from '@/api/product.api';
 import {
   Accordion,
   AccordionContent,
@@ -8,19 +9,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { VNDformat } from '@/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
-import axios from 'axios';
 import { ShoppingCartIcon } from 'lucide-react';
 
 export const Route = createFileRoute('/(app)/product/$id')({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const product = await axios
-      // .get(`https://dummyjson.com/products/${params.id}`)
-      // .then((res) => res.data);
-      .get(`http://localhost:3000/api/v1/products/${params.id}`)
-      .then((res) => res.data.data);
-
-    return { product };
+    const data = await productAPI.getProductById(params.id);
+    return { product: data.data };
   },
 });
 

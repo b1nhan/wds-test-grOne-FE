@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import axios from 'axios';
+import { productAPI } from '@/api/product.api';
 import ShoeHeader from '@/assets/shoe-header.png';
 import { SearchIcon, Settings2Icon, ShoppingBagIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,13 +14,15 @@ import {
 export const Route = createFileRoute('/(app)/')({
   component: RouteComponent,
   loader: async () => {
-    const products = await axios
-      // .get('https://dummyjson.com/products/category/mens-shoes')
-      // .then((res) => res.data.products);
-      .get('http://localhost:3000/api/v1/products')
-      .then((res) => res.data.data.items);
-    console.log(products)
-    return { products };
+    const data = await productAPI.getProducts({
+      page: 1,
+      limit: 10,
+      sort: 'newest'
+    });
+    return { 
+      products: data.data.items,
+      pagination: data.data.pagination 
+    };
   },
 });
 
@@ -79,7 +81,7 @@ function RouteComponent() {
         <h1 className="text-2xl font-semibold">Sản phẩm</h1>
         <div className="grid grid-cols-4 gap-8">
           {
-          products.slice(0, 10).map((product) => (
+          products.map((product) => (
             <ProductCard product={product} />
            )
           )
