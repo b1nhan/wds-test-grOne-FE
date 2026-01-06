@@ -6,7 +6,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { convertToVND } from '@/lib/utils';
+import { VNDformat } from '@/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
 import axios from 'axios';
 import { ShoppingCartIcon } from 'lucide-react';
@@ -15,13 +15,24 @@ export const Route = createFileRoute('/(app)/product/$id')({
   component: RouteComponent,
   loader: async ({ params }) => {
     const product = await axios
-      .get(`https://dummyjson.com/products/${params.id}`)
-      .then((res) => res.data);
+      // .get(`https://dummyjson.com/products/${params.id}`)
+      // .then((res) => res.data);
+      .get(`http://localhost:3000/api/v1/products/${params.id}`)
+      .then((res) => res.data.data);
 
     return { product };
   },
 });
 
+// cấu trúc response (data.data.items) -- chi tiết ở API Spec
+// createdAt,
+// description
+// id,
+// imageUrl,
+// name,
+// price,
+// stock,
+// updatedAt,
 function RouteComponent() {
   const { product } = Route.useLoaderData();
   return (
@@ -29,17 +40,17 @@ function RouteComponent() {
       <header className="container mx-auto mt-16 grid gap-16 px-4 md:grid-cols-2">
         <figure className="bg-accent aspect-square w-full max-w-2xl rounded-md border object-cover p-32">
           <img
-            src={product.thumbnail}
-            alt={product.title}
+            src={product.imageUrl}
+            alt={product.name}
             className="h-full w-full"
           />
         </figure>
 
         <form className="flex max-w-[50ch] flex-1 flex-col gap-4">
-          <h1 className="text-2xl">{product.title}</h1>
+          <h1 className="text-2xl">{product.name}</h1>
 
           <p className="inline-flex items-center gap-4 text-2xl font-bold">
-            {convertToVND(product.price)}
+            {VNDformat(product.price)}
 
             <span className="text-muted-foreground text-base font-normal">
               •

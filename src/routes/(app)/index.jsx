@@ -15,9 +15,11 @@ export const Route = createFileRoute('/(app)/')({
   component: RouteComponent,
   loader: async () => {
     const products = await axios
-      .get('https://dummyjson.com/products/category/mens-shoes')
-      .then((res) => res.data.products);
-
+      // .get('https://dummyjson.com/products/category/mens-shoes')
+      // .then((res) => res.data.products);
+      .get('http://localhost:3000/api/v1/products')
+      .then((res) => res.data.data.items);
+    console.log(products)
     return { products };
   },
 });
@@ -74,11 +76,14 @@ function RouteComponent() {
       </section>
 
       <section className="container mx-auto flex flex-col gap-8 px-4 pb-32">
-        <h1 className="text-2xl font-semibold">Hàng mới về</h1>
+        <h1 className="text-2xl font-semibold">Sản phẩm</h1>
         <div className="grid grid-cols-4 gap-8">
-          {products.slice(0, 4).map((product) => (
+          {
+          products.slice(0, 10).map((product) => (
             <ProductCard product={product} />
-          ))}
+           )
+          )
+          }
         </div>
       </section>
     </>
