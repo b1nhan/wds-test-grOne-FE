@@ -3,3 +3,6 @@ export { default as Footer } from './Footer';
 export { default as ProductCard } from './ProductCard';
 export { default as QuantityInput } from './QuantityInput';
 export { default as Card } from './Card';
+export { default as Edit } from './PopupEdit';
+export { default as Delete } from './PopupDelete';
+export { default as Create } from './PopupCreate';

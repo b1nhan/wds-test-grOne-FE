@@ -11,7 +11,16 @@ export const productAPI = {
 
   searchProducts: (keyword, params) => {
     return axiosClient.get('/products', {
-      params: { keyword, ...params }
+      params: { keyword, ...params },
     });
+  },
+  editProducts: (id, data) => {
+    return axiosClient.put(`/products/${id}`, data);
+  },
+  deleteProducts: (id) => {
+    return axiosClient.delete(`/products/${id}`);
+  },
+  createProducts: (data) => {
+    return axiosClient.post(`/products`, data);
   },
 };
