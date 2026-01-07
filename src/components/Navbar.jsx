@@ -1,18 +1,11 @@
-import { CircleUser, ShoppingCart } from 'lucide-react';
-
-let Navbar = () => {
+const Navbar = ({ children }) => {
   return (
     <header>
-      <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-between bg-white p-4 px-10 shadow">
-        <div className="text-3xl font-bold">LOGO</div>
-        <div className="Right flex gap-6">
-          <ShoppingCart />
-          <div className="flex items-center gap-2">
-            <b>Username</b>
-            <CircleUser className="size-8" />
-          </div>
-        </div>
-      </div>
+      <nav className="bg-background sticky inset-x-0 top-0 z-10 flex items-center justify-between p-4">
+        <div className="flex items-center gap-2">{children}</div>
+
+        <div className="flex items-center gap-2"></div>
+      </nav>
     </header>
   );
 };

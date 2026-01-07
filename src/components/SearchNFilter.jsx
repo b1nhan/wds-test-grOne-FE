@@ -2,9 +2,17 @@ import { useState } from 'react';
 import { VNDformat } from '@/lib/utils';
 import { Settings2Icon, SearchIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { InputGroup, InputGroupInput, InputGroupAddon, InputGroupButton } from './ui/input-group';
-import { validatePriceRange, getDefaultFilters, hasActiveFilters} from '@/lib/utils.productsSearch';
-
+import {
+  InputGroup,
+  InputGroupInput,
+  InputGroupAddon,
+  InputGroupButton,
+} from './ui/input-group';
+import {
+  validatePriceRange,
+  getDefaultFilters,
+  hasActiveFilters,
+} from '@/lib/utils.productsSearch';
 
 export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
   const [searchKeyword, setSearchKeyword] = useState(defaultKeyword);
@@ -50,9 +58,8 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
   const isFiltered = hasActiveFilters({
     minPrice,
     maxPrice,
-    sort: sortBy
+    sort: sortBy,
   });
-
 
   return (
     <section className="container mx-auto flex flex-col items-center px-4 py-16">
@@ -67,7 +74,7 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
         <InputGroupAddon>
           <button
             onClick={handleSearch}
-            className="flex items-center justify-center hover:text-blue-600 cursor-pointer"
+            className="flex cursor-pointer items-center justify-center hover:text-blue-600"
           >
             <SearchIcon />
           </button>
@@ -86,29 +93,24 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
 
       {/* Dropdown*/}
       {showFilters && (
-        <div className="mt-4 w-full max-w-xl bg-white rounded-lg shadow-lg border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="mt-4 w-full max-w-xl rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
+          <div className="mb-4 flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">Bộ lọc</h3>
-            <Button 
-                className="dark"
-                size="lg"
-                onClick={handleReset}
-            >
-                Xóa bộ lọc
+            <Button className="dark" size="lg" onClick={handleReset}>
+              Xóa bộ lọc
             </Button>
-            
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3">
               <p className="text-sm text-red-600">{error}</p>
             </div>
           )}
 
           {/* Price Range */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="mb-3 block text-sm font-medium text-gray-700">
               Khoảng giá
             </label>
             <div className="flex items-center gap-3">
@@ -117,7 +119,7 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
                 placeholder="Giá tối thiểu"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
               <span className="text-gray-500">-</span>
               <input
@@ -125,14 +127,14 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
                 placeholder="Giá tối đa"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
           </div>
 
           {/* Sort Options */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="mb-3 block text-sm font-medium text-gray-700">
               Sắp xếp theo
             </label>
             <div className="space-y-2">
@@ -143,7 +145,7 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
               ].map((option) => (
                 <label
                   key={option.value}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+                  className="flex cursor-pointer items-center gap-3 rounded-lg p-3 transition-colors hover:bg-gray-50"
                 >
                   <input
                     type="radio"
@@ -151,29 +153,30 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
                     value={option.value}
                     checked={sortBy === option.value}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="w-4 h-4 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    className="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500"
                   />
                   <span className="text-sm text-gray-700">{option.label}</span>
                 </label>
               ))}
             </div>
           </div>
-            <Button 
-                    className="w-full" 
-                    size="lg"
-                    onClick={() => {
-                    handleSearch();
-                    if (!error) setShowFilters(false);
-                    }}
-                >
-                Áp dụng bộ lọc
-            </Button>
+          <Button
+            className="w-full"
+            size="lg"
+            onClick={() => {
+              handleSearch();
+              if (!error) setShowFilters(false);
+            }}
+          >
+            Áp dụng bộ lọc
+          </Button>
         </div>
       )}
 
       {searchKeyword && (
         <p className="mt-4 text-sm text-gray-600">
-          Tìm kiếm kết quả cho: "<span className="font-semibold">{searchKeyword}</span>"
+          Tìm kiếm kết quả cho: "
+          <span className="font-semibold">{searchKeyword}</span>"
         </p>
       )}
 
@@ -182,17 +185,17 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
           <span>Bộ lọc:</span>
           <div className="flex flex-wrap gap-2">
             {minPrice && (
-              <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+              <span className="rounded-full bg-blue-100 px-2 py-1 text-blue-700">
                 Từ {VNDformat(minPrice)}
               </span>
             )}
             {maxPrice && (
-              <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+              <span className="rounded-full bg-blue-100 px-2 py-1 text-blue-700">
                 Đến {VNDformat(maxPrice)}
               </span>
             )}
             {sortBy !== 'newest' && (
-              <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+              <span className="rounded-full bg-blue-100 px-2 py-1 text-blue-700">
                 {sortBy === 'price_asc' ? 'Giá tăng' : 'Giá giảm'}
               </span>
             )}
@@ -202,3 +205,4 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
     </section>
   );
 }
+
