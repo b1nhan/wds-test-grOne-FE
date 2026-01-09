@@ -8,7 +8,7 @@ let Navbar = () => {
           LOGO
         </Link>
         <div className="Right flex gap-6">
-          <Link to="admin/manage">
+          <Link to="/admin">
             <b>Quản lý</b>
           </Link>
           <ShoppingCart />

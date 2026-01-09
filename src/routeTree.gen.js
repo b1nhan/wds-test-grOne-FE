@@ -13,6 +13,7 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as appRouteRouteImport } from './routes/(app)/route'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as appIndexRouteImport } from './routes/(app)/index'
+import { Route as appCartIndexRouteImport } from './routes/(app)/cart/index'
 import { Route as appProductIdRouteImport } from './routes/(app)/product/$id'
 
 const AdminRouteRoute = AdminRouteRouteImport.update({
@@ -34,6 +35,11 @@ const appIndexRoute = appIndexRouteImport.update({
   path: '/',
   getParentRoute: () => appRouteRoute,
 })
+const appCartIndexRoute = appCartIndexRouteImport.update({
+  id: '/cart/',
+  path: '/cart/',
+  getParentRoute: () => appRouteRoute,
+})
 const appProductIdRoute = appProductIdRouteImport.update({
   id: '/product/$id',
   path: '/product/$id',
@@ -43,6 +49,7 @@ const appProductIdRoute = appProductIdRouteImport.update({
 const appRouteRouteChildren = {
   appIndexRoute: appIndexRoute,
   appProductIdRoute: appProductIdRoute,
+  appCartIndexRoute: appCartIndexRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
