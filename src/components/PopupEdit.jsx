@@ -38,7 +38,13 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-      <div className="relative flex h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleEdit();
+        }}
+        className="relative flex h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
+      >
         {/* Header */}
         <div className="flex items-center justify-between border-b px-8 py-5">
           <div>
@@ -80,6 +86,7 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
               </div>
 
               <input
+                required
                 name="imageUrl"
                 value={formData.imageUrl || ''}
                 onChange={handleChange}
@@ -95,6 +102,7 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
                   Tên sản phẩm
                 </label>
                 <input
+                  required
                   name="name"
                   value={formData.name || ''}
                   onChange={handleChange}
@@ -108,6 +116,7 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
                     Giá bán (VND)
                   </label>
                   <input
+                    required
                     type="number"
                     name="price"
                     value={formData.price ?? ''}
@@ -121,6 +130,7 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
                     Số lượng kho
                   </label>
                   <input
+                    required
                     type="number"
                     name="stock"
                     value={formData.stock ?? ''}
@@ -135,6 +145,7 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
                   Mô tả sản phẩm
                 </label>
                 <textarea
+                  required
                   name="description"
                   rows={5}
                   value={formData.description || ''}
@@ -161,7 +172,7 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
               Hủy
             </button>
             <button
-              onClick={handleEdit}
+              type="submit"
               className="flex items-center gap-2 rounded-xl bg-lime-500 px-8 py-2.5 font-bold text-black shadow hover:bg-lime-600 active:scale-95"
             >
               <Save className="h-5 w-5" />
@@ -169,7 +180,7 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
             </button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
