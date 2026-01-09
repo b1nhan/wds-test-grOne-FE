@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { logout } from '@/lib/utils.auth';
+import { cn } from '@/lib/utils';
 
 const LoggedIn = ({ user }) => {
   const router = useRouter();
@@ -44,7 +45,7 @@ const LoggedIn = ({ user }) => {
           <DropdownMenuGroup>
             <Link to="/">
               <DropdownMenuItem>
-                <LayoutDashboardIcon /> Profile
+                <User /> Profile
               </DropdownMenuItem>
             </Link>
 
@@ -83,12 +84,17 @@ const NotLoggedIn = () => {
     </>
   );
 };
-const Navbar = ({ children }) => {
+const Navbar = ({ children, className }) => {
   const { user } = useRouteContext({ from: '__root__' });
 
   return (
     <header>
-      <nav className="bg-background sticky inset-x-0 top-0 z-10 container mx-auto flex items-center justify-between px-4 py-2">
+      <nav
+        className={cn(
+          'bg-background sticky inset-x-0 top-0 z-10 flex items-center justify-between px-4 py-2',
+          className,
+        )}
+      >
         <div className="flex items-center gap-2">
           {children} <h1 className="font-bold">Cửa hàng</h1>
         </div>
