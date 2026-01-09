@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as appRouteRouteImport } from './routes/(app)/route'
 import { Route as appIndexRouteImport } from './routes/(app)/index'
 import { Route as appManageRouteImport } from './routes/(app)/manage'
+import { Route as appProfileProfileRouteImport } from './routes/(app)/profile/profile'
 import { Route as appProductIdRouteImport } from './routes/(app)/product/$id'
 
 const appRouteRoute = appRouteRouteImport.update({
@@ -28,6 +29,11 @@ const appManageRoute = appManageRouteImport.update({
   path: '/manage',
   getParentRoute: () => appRouteRoute,
 })
+const appProfileProfileRoute = appProfileProfileRouteImport.update({
+  id: '/profile/profile',
+  path: '/profile/profile',
+  getParentRoute: () => appRouteRoute,
+})
 const appProductIdRoute = appProductIdRouteImport.update({
   id: '/product/$id',
   path: '/product/$id',
@@ -38,6 +44,7 @@ const appRouteRouteChildren = {
   appManageRoute: appManageRoute,
   appIndexRoute: appIndexRoute,
   appProductIdRoute: appProductIdRoute,
+  appProfileProfileRoute: appProfileProfileRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
