@@ -13,15 +13,15 @@ import { Link } from '@tanstack/react-router';
 const ProductCard = ({ product }) => {
   return (
     <Link
-      to="/product/$id"
-      params={{ id: product.id }}
+      to="/product/$productId"
+      params={{ productId: product.id }}
       className="flex flex-col duration-150 hover:scale-105"
     >
-      <figure className="bg-secondary mb-4 w-full">
+      <figure className="bg-secondary mb-4 aspect-square w-full overflow-hidden">
         <img
           src={product.imageUrl}
           alt={product.name}
-          className="aspect-square w-full object-cover"
+          className="h-full w-full object-cover"
         />
       </figure>
 

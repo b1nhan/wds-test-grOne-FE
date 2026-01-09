@@ -62,7 +62,7 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
   });
 
   return (
-    <section className="container mx-auto flex flex-col items-center px-4 py-16">
+    <section className="container mx-auto flex flex-col items-center px-4 py-8">
       <InputGroup className="max-w-xl rounded-full px-2 py-6">
         <InputGroupInput
           type="text"
@@ -71,15 +71,16 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
           onChange={(e) => setSearchKeyword(e.target.value)}
           onKeyPress={handleKeyPress}
         />
-        <InputGroupAddon>
-          <button
-            onClick={handleSearch}
-            className="flex cursor-pointer items-center justify-center hover:text-blue-600"
-          >
-            <SearchIcon />
-          </button>
-        </InputGroupAddon>
+
         <InputGroupAddon align="end">
+          <InputGroupAddon>
+            <button
+              onClick={handleSearch}
+              className="flex cursor-pointer items-center justify-center hover:text-blue-600"
+            >
+              <SearchIcon />
+            </button>
+          </InputGroupAddon>
           <InputGroupButton
             variant="ghost"
             size="icon"
@@ -205,4 +206,3 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
     </section>
   );
 }
-
