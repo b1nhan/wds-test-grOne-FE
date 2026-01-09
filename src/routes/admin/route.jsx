@@ -3,9 +3,9 @@ import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/admin')({
   component: () => {
-    // kiểm tra quyền admin ở đây
-    // eslint-disable-next-line no-constant-condition
-    if (false) {
+    const { user } = Route.useRouteContext();
+
+    if (!user || user.role !== 'ADMIN') {
       return <NotAdminComponent />;
     }
 

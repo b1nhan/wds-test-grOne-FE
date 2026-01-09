@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { register } from '@/lib/utils.auth';
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -11,15 +12,26 @@ export const Route = createFileRoute('/auth/register')({
 function RouteComponent() {
   const router = useRouter();
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  const register = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    // logic đăng ký ở đây
+    if (loading) return;
+    setLoading(true);
 
-    router.navigate({ to: '/' });
+    try {
+      await register({ email, password, phone, full_name: username });
+      router.navigate({ to: '/' });
+    } catch (err) {
+      setError(err.message);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -31,7 +43,7 @@ function RouteComponent() {
         </p>
       </div>
 
-      <form onSubmit={register} className="flex flex-col gap-4">
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="email">Email</Label>
           <Input
@@ -42,7 +54,7 @@ function RouteComponent() {
           />
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="username">Tên đăng nhập</Label>
+          <Label htmlFor="username">Họ và tên</Label>
           <Input
             id="username"
             value={username}
@@ -50,9 +62,18 @@ function RouteComponent() {
           />
         </div>
         <div className="flex flex-col gap-2">
+          <Label htmlFor="phone">Số điện thoại</Label>
+          <Input
+            id="phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
           <Label htmlFor="password">Mật khẩu</Label>
           <Input
             id="password"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -63,7 +84,10 @@ function RouteComponent() {
             Đăng nhập
           </Link>
         </p>
-        <Button type="submit">Đăng ký</Button>
+        {error && <p className="text-destructive">{error}</p>}
+        <Button disabled={loading} type="submit">
+          Đăng ký
+        </Button>
       </form>
     </div>
   );

@@ -1,6 +1,8 @@
+import { authAPI } from '@/api/auth.api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { login } from '@/lib/utils.auth';
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -10,15 +12,25 @@ export const Route = createFileRoute('/auth/login')({
 
 function RouteComponent() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  const login = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    // logic đăng nhập ở đây
+    if (loading) return;
+    setLoading(true);
 
-    router.navigate({ to: '/' });
+    try {
+      await login({ email, password });
+      router.navigate({ to: '/' });
+    } catch (err) {
+      setError(err.message);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -30,19 +42,21 @@ function RouteComponent() {
         </p>
       </div>
 
-      <form onSubmit={login} className="flex flex-col gap-4">
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <Label htmlFor="username">Tên đăng nhập</Label>
+          <Label htmlFor="email">Email</Label>
           <Input
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="password">Mật khẩu</Label>
           <Input
             id="password"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -54,7 +68,10 @@ function RouteComponent() {
           </Link>{' '}
           ngay!
         </p>
-        <Button type="submit">Đăng nhập</Button>
+        {error && <p className="text-destructive">{error}</p>}
+        <Button disabled={loading} type="submit">
+          Đăng nhập
+        </Button>
       </form>
     </div>
   );
