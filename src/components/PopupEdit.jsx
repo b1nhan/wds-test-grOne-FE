@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, Upload, Save, Trash2 } from 'lucide-react';
 import { productAPI } from '@/api/product.api';
 
-const PopupEdit = ({ product, onClose }) => {
+const PopupEdit = ({ product, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
@@ -24,9 +24,13 @@ const PopupEdit = ({ product, onClose }) => {
 
   const handleEdit = async () => {
     try {
-      await productAPI.editProducts(product.id, formData);
+      const res = await productAPI.editProducts(product.id, formData);
       alert('Sửa thành công');
-      onClose();
+
+      if (res.success) {
+        onSuccess();
+        onClose();
+      }
     } catch (error) {
       alert(error?.message || 'Có lỗi xảy ra khi sửa sản phẩm');
     }

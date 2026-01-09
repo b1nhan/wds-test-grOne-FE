@@ -1,13 +1,13 @@
 import { Edit, Delete } from '@/components';
 
 import { useState } from 'react';
-let Card = ({ product }) => {
+let Card = ({ product, onSuccessC }) => {
   let [showEdit, setShowEdit] = useState(false);
   let [showDelete, setShowDelete] = useState(false);
 
   return (
-    <div className="flex flex-col justify-center border border-black p-2">
-      <figure className="relative h-[200px] w-full bg-black">
+    <div className="flex flex-col justify-center p-2 shadow">
+      <figure className="relative h-[150px] w-full bg-black">
         <img
           src={product.imageUrl}
           alt={product.name}
@@ -22,7 +22,11 @@ let Card = ({ product }) => {
           Sửa
         </button>
         {showEdit ? (
-          <Edit product={product} onClose={() => setShowEdit(false)}></Edit>
+          <Edit
+            onSuccess={onSuccessC}
+            product={product}
+            onClose={() => setShowEdit(false)}
+          ></Edit>
         ) : (
           <></>
         )}
@@ -35,6 +39,7 @@ let Card = ({ product }) => {
         </button>
         {showDelete ? (
           <Delete
+            onSuccess={onSuccessC}
             product={product}
             onClose={() => setShowDelete(false)}
           ></Delete>

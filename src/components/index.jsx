@@ -6,3 +6,4 @@ export { default as Card } from './Card';
 export { default as Edit } from './PopupEdit';
 export { default as Delete } from './PopupDelete';
 export { default as Create } from './PopupCreate';
+export { default as AdminFooter } from './AdminFooter';

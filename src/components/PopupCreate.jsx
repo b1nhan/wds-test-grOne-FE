@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { X, Upload, Save } from 'lucide-react';
 import { productAPI } from '@/api/product.api';
 
-const PopupCreate = ({ onClose }) => {
+const PopupCreate = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
@@ -22,9 +22,12 @@ const PopupCreate = ({ onClose }) => {
 
   const handleCreate = async () => {
     try {
-      await productAPI.createProducts(formData);
+      const res = await productAPI.createProducts(formData);
       alert('Tạo sản phẩm thành công');
-      onClose();
+      if (res.success) {
+        onClose();
+        onSuccess();
+      }
     } catch (error) {
       alert(error?.message || 'Có lỗi xảy ra khi tạo sản phẩm');
     }

@@ -1,14 +1,17 @@
 import { X } from 'lucide-react';
 import { productAPI } from '@/api/product.api';
 
-const PopupDelete = ({ product, onClose }) => {
+const PopupDelete = ({ product, onClose, onSuccess }) => {
   if (!product) return null;
 
   const handleDelete = async () => {
     try {
-      await productAPI.deleteProducts(product.id);
+      const res = await productAPI.deleteProducts(product.id);
       alert('Xóa sản phẩm thành công');
-      onClose();
+      if (res.success) {
+        onSuccess();
+        onClose();
+      }
     } catch (error) {
       alert(error?.message || 'Có lỗi xảy ra khi xóa sản phẩm');
     }

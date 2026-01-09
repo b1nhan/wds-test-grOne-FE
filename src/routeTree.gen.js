@@ -9,23 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as appRouteRouteImport } from './routes/(app)/route'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as appIndexRouteImport } from './routes/(app)/index'
-import { Route as appManageRouteImport } from './routes/(app)/manage'
 import { Route as appProductIdRouteImport } from './routes/(app)/product/$id'
 
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+})
 const appRouteRoute = appRouteRouteImport.update({
   id: '/(app)',
   getParentRoute: () => rootRouteImport,
 })
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+})
 const appIndexRoute = appIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => appRouteRoute,
-})
-const appManageRoute = appManageRouteImport.update({
-  id: '/manage',
-  path: '/manage',
   getParentRoute: () => appRouteRoute,
 })
 const appProductIdRoute = appProductIdRouteImport.update({
@@ -35,7 +41,6 @@ const appProductIdRoute = appProductIdRouteImport.update({
 })
 
 const appRouteRouteChildren = {
-  appManageRoute: appManageRoute,
   appIndexRoute: appIndexRoute,
   appProductIdRoute: appProductIdRoute,
 }
@@ -44,7 +49,16 @@ const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
   appRouteRouteChildren,
 )
 
+const AdminRouteRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 const rootRouteChildren = {
   appRouteRoute: appRouteRouteWithChildren,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)

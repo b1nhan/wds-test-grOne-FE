@@ -4,9 +4,11 @@ let Navbar = () => {
   return (
     <header>
       <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-between bg-white p-4 px-10 shadow">
-        <div className="text-3xl font-bold">LOGO</div>
+        <Link className="text-3xl font-bold" to="/">
+          LOGO
+        </Link>
         <div className="Right flex gap-6">
-          <Link to="/manage">
+          <Link to="admin/manage">
             <b>Quản lý</b>
           </Link>
           <ShoppingCart />
