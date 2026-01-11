@@ -1,16 +1,19 @@
-import { productAPI } from '@/api/product.api';
-import { Button } from '@/components/ui/button';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { DeleteIcon, EditIcon, PlusIcon, TrashIcon, XIcon } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import DataTable from '@/components/DataTable';
-import { VNDformat } from '@/lib/utils';
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { useState } from 'react';
+import { productAPI } from '@/api/product.api';
+import { Card, Create, AdminFooter } from '@/components';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { PlusIcon } from 'lucide-react';
+export const Route = createFileRoute('/admin/')({
+  component: RouteComponent,
+});
 
-/**
- * @param {{ keyword: string; pageData: import('@tanstack/react-table').PaginationState }} params
- */
 const fetchProducts = async ({ keyword, pageData }) => {
   const data = await productAPI.getProducts({
     page: pageData.pageIndex + 1,
@@ -25,92 +28,89 @@ const fetchProducts = async ({ keyword, pageData }) => {
   return data.data;
 };
 
-/** @type {import('@tanstack/react-table').PaginationState} */
-const initialPageData = { pageIndex: 0, pageSize: 5 };
-
-export const Route = createFileRoute('/admin/')({
-  component: RouteComponent,
-});
-
 function RouteComponent() {
+  const initialPageData = { pageIndex: 0, pageSize: 10 };
+  const [isShow, setShow] = useState(false);
   const [keyword, setKeyword] = useState('');
+
   const [pageData, setPageData] = useState(initialPageData);
   const query = useQuery({
     queryKey: ['products', keyword, pageData],
     queryFn: () => fetchProducts({ keyword, pageData }),
     placeholderData: keepPreviousData,
   });
+  const products = query.data?.items ?? [];
+  const handleReset = () => {
+    setKeyword('');
+    setPageData(initialPageData);
+  };
+  const queryClient = useQueryClient();
+  const handleActionSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['products'] });
+  };
 
-  const defaultData = useMemo(() => [], []);
-
-  /** @type {import('@tanstack/react-table').ColumnDef<any>[]} */
-  const columns = [
-    {
-      accessorKey: 'imageUrl',
-      header: null,
-      size: 16,
-      cell: ({ getValue, column }) => (
-        <img
-          src={getValue()}
-          style={{ minWidth: `${column.getSize()}px` }}
-          className="aspect-square w-full rounded-sm object-cover"
-        />
-      ),
-    },
-    {
-      accessorKey: 'name',
-      header: 'Sản phẩm',
-    },
-    {
-      accessorKey: 'price',
-      header: 'Giá',
-      cell: ({ getValue }) => VNDformat(getValue()),
-    },
-    {
-      accessorKey: 'stock',
-      header: 'Số lượng',
-    },
-    {
-      accessorKey: 'id',
-      header: 'Hành động',
-      cell: () => (
-        <div className="flex items-center gap-4">
-          <Button variant="outline" size="icon">
-            <EditIcon />
-          </Button>
-          <Button variant="outline" size="icon">
-            <TrashIcon />
-          </Button>
-        </div>
-      ),
-    },
-  ];
-
+  const totalPages = query.data?.pagination?.totalPages ?? 0;
+  const currentPage = pageData.pageIndex + 1;
   return (
-    <section className="flex flex-col gap-4 p-4">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+    <div className="flex flex-col items-center justify-center px-10">
+      <div className="h-[65px] w-full bg-black"></div>
+      <div className="mt-2 mb-5 flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold sm:flex-1">Quản lý sản phẩm</h1>
-
-        <Input
-          placeholder="Tìm kiếm"
-          value={keyword}
-          className="max-w-56"
-          onChange={(e) => setKeyword(e.target.value)}
-        />
-
-        <Button variant="secondary">
-          <PlusIcon />
-          Thêm sản phẩm
-        </Button>
+        <>
+          <Input
+            placeholder="Tìm kiếm"
+            value={keyword}
+            className="max-w-80 sm:max-w-56"
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+          <Button variant="secondary" onClick={() => setShow(true)}>
+            <PlusIcon />
+            Thêm sản phẩm
+          </Button>
+        </>
       </div>
+      {isShow ? (
+        <Create
+          onSuccess={handleActionSuccess}
+          onClose={() => setShow(false)}
+        ></Create>
+      ) : (
+        <></>
+      )}
 
-      <DataTable
-        data={query.data?.items ?? defaultData}
-        columns={columns}
-        pagination={pageData}
-        onPaginationChange={setPageData}
-        pageCount={query.data?.pagination?.totalPages ?? 0}
+      <section className="container mx-auto flex flex-col gap-8 pb-32">
+        {query.isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-green-500 border-t-transparent"></div>
+          </div>
+        ) : products.length > 0 ? (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+            {products.map((product) => (
+              <Card
+                onSuccessC={handleActionSuccess}
+                key={product.id}
+                product={product}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="py-20 text-center text-gray-500">
+            <p className="text-lg">Không tìm thấy sản phẩm nào</p>
+            <button
+              onClick={handleReset}
+              className="mt-4 cursor-pointer text-blue-600 hover:underline"
+            >
+              Xem các sản phẩm khác
+            </button>
+          </div>
+        )}
+      </section>
+      <AdminFooter
+        total={totalPages}
+        curr={currentPage}
+        data={pageData}
+        onPageChange={setPageData}
       />
-    </section>
+    </div>
   );
 }

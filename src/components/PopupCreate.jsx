@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { X, Upload, Save } from 'lucide-react';
 import { productAPI } from '@/api/product.api';
 
-const PopupCreate = ({ onClose }) => {
+const PopupCreate = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
@@ -22,9 +22,12 @@ const PopupCreate = ({ onClose }) => {
 
   const handleCreate = async () => {
     try {
-      await productAPI.createProducts(formData);
+      const res = await productAPI.createProducts(formData);
       alert('Tạo sản phẩm thành công');
-      onClose();
+      if (res.success) {
+        onClose();
+        onSuccess();
+      }
     } catch (error) {
       alert(error?.message || 'Có lỗi xảy ra khi tạo sản phẩm');
     }
@@ -32,7 +35,13 @@ const PopupCreate = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-      <div className="relative flex h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleCreate();
+        }}
+        className="relative flex h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
+      >
         {/* Header */}
         <div className="flex items-center justify-between border-b px-8 py-5">
           <h2 className="text-2xl font-bold text-zinc-800">
@@ -68,6 +77,7 @@ const PopupCreate = ({ onClose }) => {
               </div>
 
               <input
+                required
                 name="imageUrl"
                 value={formData.imageUrl}
                 onChange={handleChange}
@@ -83,6 +93,7 @@ const PopupCreate = ({ onClose }) => {
                   Tên sản phẩm
                 </label>
                 <input
+                  required
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
@@ -96,6 +107,7 @@ const PopupCreate = ({ onClose }) => {
                     Giá bán (VND)
                   </label>
                   <input
+                    required
                     type="number"
                     name="price"
                     value={formData.price}
@@ -109,6 +121,7 @@ const PopupCreate = ({ onClose }) => {
                     Số lượng kho
                   </label>
                   <input
+                    required
                     type="number"
                     name="stock"
                     value={formData.stock}
@@ -123,6 +136,7 @@ const PopupCreate = ({ onClose }) => {
                   Mô tả sản phẩm
                 </label>
                 <textarea
+                  required
                   name="description"
                   rows={5}
                   value={formData.description}
@@ -143,14 +157,14 @@ const PopupCreate = ({ onClose }) => {
             Hủy
           </button>
           <button
-            onClick={handleCreate}
+            type="submit"
             className="flex items-center gap-2 rounded-xl bg-lime-500 px-8 py-2.5 font-bold text-black shadow hover:bg-lime-600 active:scale-95"
           >
             <Save className="h-5 w-5" />
             Tạo sản phẩm
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
