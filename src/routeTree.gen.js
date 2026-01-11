@@ -9,9 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as appRouteRouteImport } from './routes/(app)/route'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as appIndexRouteImport } from './routes/(app)/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
@@ -54,9 +55,9 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 })
-const appManageRoute = appManageRouteImport.update({
-  id: '/manage',
-  path: '/manage',
+const appCartIndexRoute = appCartIndexRouteImport.update({
+  id: '/cart/',
+  path: '/cart/',
   getParentRoute: () => appRouteRoute,
 })
 const appProfileProfileRoute = appProfileProfileRouteImport.update({
@@ -71,10 +72,8 @@ const appProductIdRoute = appProductIdRouteImport.update({
 })
 
 const appRouteRouteChildren = {
-  appManageRoute: appManageRoute,
   appIndexRoute: appIndexRoute,
   appProductIdRoute: appProductIdRoute,
-  appProfileProfileRoute: appProfileProfileRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(

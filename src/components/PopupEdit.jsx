@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, Upload, Save, Trash2 } from 'lucide-react';
 import { productAPI } from '@/api/product.api';
 
-const PopupEdit = ({ product, onClose }) => {
+const PopupEdit = ({ product, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
@@ -24,9 +24,13 @@ const PopupEdit = ({ product, onClose }) => {
 
   const handleEdit = async () => {
     try {
-      await productAPI.editProducts(product.id, formData);
+      const res = await productAPI.editProducts(product.id, formData);
       alert('Sửa thành công');
-      onClose();
+
+      if (res.success) {
+        onSuccess();
+        onClose();
+      }
     } catch (error) {
       alert(error?.message || 'Có lỗi xảy ra khi sửa sản phẩm');
     }
@@ -34,7 +38,13 @@ const PopupEdit = ({ product, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-      <div className="relative flex h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleEdit();
+        }}
+        className="relative flex h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
+      >
         {/* Header */}
         <div className="flex items-center justify-between border-b px-8 py-5">
           <div>
@@ -76,6 +86,7 @@ const PopupEdit = ({ product, onClose }) => {
               </div>
 
               <input
+                required
                 name="imageUrl"
                 value={formData.imageUrl || ''}
                 onChange={handleChange}
@@ -91,6 +102,7 @@ const PopupEdit = ({ product, onClose }) => {
                   Tên sản phẩm
                 </label>
                 <input
+                  required
                   name="name"
                   value={formData.name || ''}
                   onChange={handleChange}
@@ -104,6 +116,7 @@ const PopupEdit = ({ product, onClose }) => {
                     Giá bán (VND)
                   </label>
                   <input
+                    required
                     type="number"
                     name="price"
                     value={formData.price ?? ''}
@@ -117,6 +130,7 @@ const PopupEdit = ({ product, onClose }) => {
                     Số lượng kho
                   </label>
                   <input
+                    required
                     type="number"
                     name="stock"
                     value={formData.stock ?? ''}
@@ -131,6 +145,7 @@ const PopupEdit = ({ product, onClose }) => {
                   Mô tả sản phẩm
                 </label>
                 <textarea
+                  required
                   name="description"
                   rows={5}
                   value={formData.description || ''}
@@ -157,7 +172,7 @@ const PopupEdit = ({ product, onClose }) => {
               Hủy
             </button>
             <button
-              onClick={handleEdit}
+              type="submit"
               className="flex items-center gap-2 rounded-xl bg-lime-500 px-8 py-2.5 font-bold text-black shadow hover:bg-lime-600 active:scale-95"
             >
               <Save className="h-5 w-5" />
@@ -165,7 +180,7 @@ const PopupEdit = ({ product, onClose }) => {
             </button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
