@@ -14,7 +14,9 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as appRouteRouteImport } from './routes/(app)/route'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as appIndexRouteImport } from './routes/(app)/index'
-import { Route as appManageRouteImport } from './routes/(app)/manage'
+import { Route as AuthRegisterRouteImport } from './routes/auth/register'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as appCartIndexRouteImport } from './routes/(app)/cart/index'
 import { Route as appProductIdRouteImport } from './routes/(app)/product/$id'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -51,9 +53,9 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 })
-const appManageRoute = appManageRouteImport.update({
-  id: '/manage',
-  path: '/manage',
+const appCartIndexRoute = appCartIndexRouteImport.update({
+  id: '/cart/',
+  path: '/cart/',
   getParentRoute: () => appRouteRoute,
 })
 const appProductIdRoute = appProductIdRouteImport.update({
