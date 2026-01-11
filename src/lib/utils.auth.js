@@ -17,7 +17,9 @@ export const getProfile = async () => {
 
 export const login = async (data) => {
   const res = await authAPI.login(data);
-  localStorage.setItem('token', res.token);
+  const token = res.data.token; 
+  // console.log('this is token',token);
+  localStorage.setItem('token', token);
 };
 
 export const register = async (data) => {
