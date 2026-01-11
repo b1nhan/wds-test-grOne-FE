@@ -14,11 +14,11 @@ export const Route = createFileRoute('/(app)/')({
     const data = await productAPI.getProducts({
       page: 1,
       limit: 10,
-      sort: 'newest'
+      sort: 'newest',
     });
-    return { 
+    return {
       initialProducts: data.data.items,
-      pagination: data.data.pagination 
+      pagination: data.data.pagination,
     };
   },
 });
@@ -34,9 +34,9 @@ function RouteComponent() {
       const result = await searchProducts({
         ...filters,
         page: 1,
-        limit: 10
+        limit: 10,
       });
-      
+
       if (result.success) {
         setProducts(result.data.items);
       } else {
@@ -49,7 +49,6 @@ function RouteComponent() {
       setLoading(false);
     }
   };
-
 
   return (
     <>
@@ -85,26 +84,21 @@ function RouteComponent() {
 
       <section className="container mx-auto flex flex-col gap-8 px-4 pb-32">
         <h1 className="text-2xl font-semibold">Sản phẩm</h1>
-        
+
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
           </div>
         ) : products.length > 0 ? (
           <div className="grid grid-cols-4 gap-8">
-            {
-              products.map((product) => (
-                <ProductCard product={product} />
-              ))
-            }
-        </div>
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
         ) : (
           <div className="py-20 text-center text-gray-500">
             <p className="text-lg">Không tìm thấy sản phẩm nào</p>
-            <button 
-              onClick={handleReset}
-              className="mt-4 text-blue-600 hover:underline cursor-pointer"
-            >
+            <button className="mt-4 cursor-pointer text-blue-600 hover:underline">
               Xem các sản phẩm khác
             </button>
           </div>
@@ -113,3 +107,4 @@ function RouteComponent() {
     </>
   );
 }
+

@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { Navbar } from '@/components/';
+
 export const Route = createFileRoute('/(app)')({
   component: RouteComponent,
 });
@@ -7,9 +8,7 @@ export const Route = createFileRoute('/(app)')({
 function RouteComponent() {
   return (
     <>
-      {/* design lại navbar */}
-      {/* Bỏ vào để điều hướng */}
-      <Navbar />
+      <Navbar className="container mx-auto" />
       <Outlet />
     </>
   );
