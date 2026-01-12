@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState, useCallback } from 'react';
-import { QuantityInput } from '@/components';
 import { VNDformat } from '@/lib/utils';
-import { getCart, deleteCartItem, updateCart } from '@/lib/untils.cart';
+import { getCart, deleteCartItem } from '@/lib/utils.cart';
 import ProductCart from '@/components/ProductCart';
+import toast, { Toaster } from 'react-hot-toast';
 
 export const Route = createFileRoute('/(app)/cart/')({
   component: RouteComponent,
@@ -13,10 +13,6 @@ function RouteComponent() {
   const [cartItems, setCartItems] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
-  const [totalQuantity, setTotalQuantity] = useState(0);
-  const handleQuantityChange = (newValue) => {
-    setTotalQuantity(newValue);
-  };
   const fetchCart = useCallback(async () => {
     setLoading(true);
     try {
@@ -31,36 +27,15 @@ function RouteComponent() {
     }
   }, []);
 
-  let handleDeleteCartItem = async (itemId) => {
-    if (!confirm('Xác nhận xóa sản phẩm?')) return;
-    setLoading(true);
-    try {
-      const response = await deleteCartItem(itemId);
-      if (response.success) {
-        alert('Xóa sản phẩm thành công');
-        setCartItems((prevItems) =>
-          prevItems.filter((item) => item.product.id !== itemId),
-        );
-      } else {
-        alert('Xóa sản phẩm thất bại');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Có lỗi xảy ra');
-    } finally {
-      setLoading(false);
-    }
-  };
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
 
-  console.log('Cart Items:', totalQuantity);
   if (isLoading)
     return <div className="p-10 text-center">Đang tải giỏ hàng...</div>;
   return (
     <div className="flex h-full flex-col bg-white font-sans text-zinc-900">
-      {/* <div className="h-[65px] w-full bg-black"></div> */}
+      <Toaster />
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col overflow-hidden px-4 py-8">
         <h1 className="mb-6 text-2xl font-bold tracking-tighter uppercase">
           Giỏ hàng của bạn
@@ -76,12 +51,11 @@ function RouteComponent() {
               <div className="text-right">Thao tác</div>
             </div>
 
-            <div className="divide-y divide-zinc-100">
+            <div className="min-h-[300px] divide-y divide-zinc-100">
               {cartItems?.map((item) => (
                 <ProductCart
                   key={item.product.id}
                   item={item}
-                  onDelete={handleDeleteCartItem}
                   setCart={setCartItems}
                   loading={setLoading}
                 />

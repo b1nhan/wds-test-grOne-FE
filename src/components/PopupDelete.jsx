@@ -1,21 +1,7 @@
 import { X } from 'lucide-react';
-import { productAPI } from '@/api/product.api';
 
-const PopupDelete = ({ product, onClose, onSuccess }) => {
+const PopupDelete = ({ product, onClose, onSuccess, onDelete }) => {
   if (!product) return null;
-
-  const handleDelete = async () => {
-    try {
-      const res = await productAPI.deleteProducts(product.id);
-      alert('Xóa sản phẩm thành công');
-      if (res.success) {
-        onSuccess();
-        onClose();
-      }
-    } catch (error) {
-      alert(error?.message || 'Có lỗi xảy ra khi xóa sản phẩm');
-    }
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
@@ -41,7 +27,7 @@ const PopupDelete = ({ product, onClose, onSuccess }) => {
         {/* Footer */}
         <div className="flex justify-center gap-4 border-t px-6 py-4">
           <button
-            onClick={handleDelete}
+            onClick={onDelete}
             className="rounded-lg bg-red-500 px-6 py-2 text-sm font-semibold text-white hover:bg-red-600"
           >
             Có

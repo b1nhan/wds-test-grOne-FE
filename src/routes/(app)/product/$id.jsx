@@ -10,8 +10,9 @@ import { Button } from '@/components/ui/button';
 import { VNDformat } from '@/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
 import { ShoppingCartIcon } from 'lucide-react';
-import { addCartItem } from '@/lib/untils.cart';
+import { addCartItem } from '@/lib/utils.cart';
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 export const Route = createFileRoute('/(app)/product/$id')({
   component: RouteComponent,
@@ -38,6 +39,7 @@ function RouteComponent() {
   };
   return (
     <>
+      <Toaster />
       <header className="container mx-auto mt-16 grid gap-16 px-4 md:grid-cols-2">
         <figure className="bg-accent aspect-square w-full max-w-2xl rounded-md border object-cover p-32">
           <img
@@ -73,7 +75,9 @@ function RouteComponent() {
             onClick={(e) => {
               e.preventDefault();
               addCartItem(product.id, totalQuantity);
-              alert(`Đã thêm ${totalQuantity} sản phẩm vào giỏ hàng!`);
+              toast.success(`Đã thêm ${totalQuantity} sản phẩm vào giỏ hàng!`, {
+                duration: 4000,
+              });
             }}
           >
             <ShoppingCartIcon />
