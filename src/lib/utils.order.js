@@ -29,7 +29,7 @@ export const createOrder = async (data) => {
     return null;
   }
   try {
-    const res = await orderAPI.createOrder(data, token);
+    const res = await orderAPI.createOrder({ phone: data }, token);
     return res;
   } catch (err) {
     return err;
