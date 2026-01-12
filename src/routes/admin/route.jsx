@@ -5,7 +5,7 @@ export const Route = createFileRoute('/admin')({
   component: () => {
     const { user } = Route.useRouteContext();
 
-    if (!user || user.role !== 'ADMIN') {
+    if (!user || user.role.toUpperCase() !== 'ADMIN') {
       return <NotAdminComponent />;
     }
 

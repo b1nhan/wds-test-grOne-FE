@@ -49,7 +49,7 @@ const LoggedIn = ({ user }) => {
               </DropdownMenuItem>
             </Link>
 
-            {user.role === 'ADMIN' && (
+            {user.role.toUpperCase() === 'ADMIN' && (
               <Link to="/admin">
                 <DropdownMenuItem>
                   <LayoutDashboardIcon /> Admin
@@ -87,7 +87,6 @@ const NotLoggedIn = () => {
 };
 const Navbar = ({ children, className }) => {
   const { user } = useRouteContext({ from: '__root__' });
-
   return (
     <header>
       <nav
