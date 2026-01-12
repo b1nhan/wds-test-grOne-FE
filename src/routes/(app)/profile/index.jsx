@@ -1,5 +1,4 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { MOCK_ORDERS } from '@/api/mockData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion } from '@/components/ui/accordion';
 import { Separator } from '@/components/ui/separator';
@@ -14,6 +13,8 @@ import {
 } from 'lucide-react';
 import { OrderHistoryItem } from '@/components/OrderHistoryItem';
 import { useState } from 'react';
+import { getProfileDetail } from '@/lib/utils.auth';
+import { getMyOrder } from '@/lib/utils.order';
 
 export const Route = createFileRoute('/(app)/profile/')({
   component: ProfilePage,
@@ -22,10 +23,12 @@ export const Route = createFileRoute('/(app)/profile/')({
       throw redirect({ to: '/auth/login' });
     }
   },
-  loader: async ({ context }) => {
+  loader: async ({}) => {
+    const orders = await getMyOrder();
+    const user = await getProfileDetail();
     return {
-      user: context.user.data || context.user,
-      orders: MOCK_ORDERS.data,
+      orders: orders.data,
+      user,
     };
   },
 });
@@ -39,7 +42,7 @@ function ProfilePage() {
     email: user.email || 'N/A',
     phone: user.phone || 'Chưa cập nhật',
     role: user.role || 'USER',
-    totalSpending: user.totalSpending || 0,
+    moneySpent: user.moneySpent || 0,
   };
 
   const [isEmailVisible, setIsEmailVisible] = useState(false);
@@ -133,7 +136,7 @@ function ProfilePage() {
                         Tổng số tiền đã chi tiêu
                       </p>
                       <p className="text-xl font-bold">
-                        {VNDformat(userInfo.totalSpending)}
+                        {VNDformat(userInfo.moneySpent)}
                       </p>
                     </div>
                   </div>

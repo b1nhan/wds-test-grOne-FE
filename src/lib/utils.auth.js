@@ -8,7 +8,21 @@ export const getProfile = async () => {
 
   try {
     const me = await authAPI.me(token);
-    return me;
+    return me.data;
+  } catch {
+    return null;
+  }
+};
+
+export const getProfileDetail = async () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const user = await authAPI.userInfo(token);
+    return user.data;
   } catch {
     return null;
   }
