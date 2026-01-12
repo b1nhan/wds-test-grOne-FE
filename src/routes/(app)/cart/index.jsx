@@ -3,13 +3,21 @@ import { useEffect, useState, useCallback } from 'react';
 import { QuantityInput } from '@/components';
 import { VNDformat } from '@/lib/utils';
 import { getCart, deleteCartItem, updateCart } from '@/lib/untils.cart';
+import { getProfileDetail } from '@/lib/utils.auth';
+import { createOrder } from '@/lib/utils.order';
 import ProductCart from '@/components/ProductCart';
 
 export const Route = createFileRoute('/(app)/cart/')({
   component: RouteComponent,
+  loader: async () => {
+    const user = await getProfileDetail();
+    return { user };
+  },
 });
 
 function RouteComponent() {
+  const user = Route.useLoaderData();
+  //
   const [cartItems, setCartItems] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
@@ -101,7 +109,10 @@ function RouteComponent() {
                 : VNDformat(0)}
             </span>
           </div>
-          <button className="bg-zinc-900 px-12 py-4 font-bold text-white transition-transform hover:scale-105 active:scale-95">
+          <button
+            className="bg-zinc-900 px-12 py-4 font-bold text-white transition-transform hover:scale-105 active:scale-95"
+            onClick={() => createOrder(user.user.phone.toString())}
+          >
             THANH TOÁN NGAY
           </button>
         </div>
