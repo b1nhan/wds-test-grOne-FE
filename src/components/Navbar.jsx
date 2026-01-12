@@ -11,21 +11,35 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { logout } from '@/lib/utils.auth';
 import { cn } from '@/lib/utils';
+import { Badge } from './ui/badge';
+import { useCart } from '@/contexts/CartContext';
 
 const LoggedIn = ({ user }) => {
-  const router = useRouter();
+  const { cart } = useCart();
+
   return (
     <>
       <Link
         to="/cart"
-        className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+        className={cn(
+          buttonVariants({ variant: 'ghost', size: 'icon' }),
+          'relative',
+        )}
       >
+        {cart.data.length > 0 && (
+          <Badge
+            variant="destructive"
+            size="sm"
+            className="absolute top-0 right-0 flex w-auto min-w-[16px] items-center justify-center p-0 px-1 py-0.5 text-[8px]"
+          >
+            {cart.data.length}
+          </Badge>
+        )}
         <ShoppingCartIcon />
       </Link>
 
