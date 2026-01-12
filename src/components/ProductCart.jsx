@@ -37,7 +37,7 @@ let ProductCart = ({ item, onDelete, setCart, loading }) => {
     }
   }, [totalQuantity]);
 
-  console.log(totalQuantity);
+  // console.log(totalQuantity);
   return (
     <div className="grid grid-cols-[4fr_1.5fr_1.5fr_1.5fr_1fr] items-center py-6">
       <div className="flex items-center gap-6">

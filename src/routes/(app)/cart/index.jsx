@@ -55,7 +55,7 @@ function RouteComponent() {
     fetchCart();
   }, [fetchCart]);
 
-  console.log('Cart Items:', totalQuantity);
+  // console.log('Cart Items:', totalQuantity);
   if (isLoading)
     return <div className="p-10 text-center">Đang tải giỏ hàng...</div>;
   return (
