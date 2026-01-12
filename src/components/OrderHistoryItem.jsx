@@ -29,7 +29,7 @@ export const OrderHistoryItem = ({ order }) => {
             </div>
             <div className="text-right">
               <p className="text-xs text-muted-foreground uppercase font-semibold">Tổng thanh toán</p>
-              <p className="text-blue-600 font-bold text-lg">{VNDformat(order.totalAmount)}</p>
+              <p className="font-bold text-lg">{VNDformat(order.totalAmount)}</p>
             </div>
           </div>
         </div>
