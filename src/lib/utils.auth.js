@@ -8,7 +8,6 @@ export const getProfile = async () => {
 
   try {
     const me = await authAPI.me(token);
-    console.log('get profile', me);
     return me.data;
   } catch {
     return null;

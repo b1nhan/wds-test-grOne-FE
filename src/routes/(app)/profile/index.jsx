@@ -14,7 +14,7 @@ import {
 import { OrderHistoryItem } from '@/components/OrderHistoryItem';
 import { useState } from 'react';
 import { getProfileDetail } from '@/lib/utils.auth';
-import { getMyOrder, getOrderById } from '@/lib/utils.order';
+import { getMyOrder } from '@/lib/utils.order';
 
 export const Route = createFileRoute('/(app)/profile/')({
   component: ProfilePage,
