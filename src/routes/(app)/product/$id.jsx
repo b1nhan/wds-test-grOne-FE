@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { VNDformat } from '@/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
 import { ShoppingCartIcon } from 'lucide-react';
+import { addCartItem } from '@/lib/untils.cart';
+import { useState } from 'react';
 
 export const Route = createFileRoute('/(app)/product/$id')({
   component: RouteComponent,
@@ -30,6 +32,10 @@ export const Route = createFileRoute('/(app)/product/$id')({
 // updatedAt,
 function RouteComponent() {
   const { product } = Route.useLoaderData();
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const handleQuantityChange = (newValue) => {
+    setTotalQuantity(newValue);
+  };
   return (
     <>
       <header className="container mx-auto mt-16 grid gap-16 px-4 md:grid-cols-2">
@@ -57,13 +63,18 @@ function RouteComponent() {
 
           <p className="text-muted-foreground">{product.description}</p>
 
-          <QuantityInput max={product.stock} />
+          <QuantityInput max={product.stock} onChange={handleQuantityChange} />
 
           <Button
             size="lg"
             type="submit"
             className="my-4"
             disabled={product.stock === 0}
+            onClick={(e) => {
+              e.preventDefault();
+              addCartItem(product.id, totalQuantity);
+              alert(`Đã thêm ${totalQuantity} sản phẩm vào giỏ hàng!`);
+            }}
           >
             <ShoppingCartIcon />
             Thêm vào giỏ hàng
