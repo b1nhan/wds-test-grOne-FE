@@ -23,7 +23,7 @@ const LoggedIn = ({ user }) => {
   return (
     <>
       <Link
-        to="/"
+        to="/cart"
         className={buttonVariants({ variant: 'ghost', size: 'icon' })}
       >
         <ShoppingCartIcon />
@@ -95,9 +95,9 @@ const Navbar = ({ children, className }) => {
           className,
         )}
       >
-        <div className="flex items-center gap-2">
+        <Link to={'/'} className="flex items-center gap-2">
           {children} <h1 className="font-bold">Cửa hàng</h1>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-2">
           {user ? <LoggedIn user={user} /> : <NotLoggedIn />}
