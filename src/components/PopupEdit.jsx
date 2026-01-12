@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Upload, Save, Trash2 } from 'lucide-react';
-import { productAPI } from '@/api/product.api';
+import { editProducts } from '@/lib/utils.products';
 
 const PopupEdit = ({ product, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({});
@@ -24,7 +24,7 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
 
   const handleEdit = async () => {
     try {
-      const res = await productAPI.editProducts(product.id, formData);
+      const res = await editProducts(product.id, formData);
       alert('Sửa thành công');
 
       if (res.success) {

@@ -23,7 +23,7 @@ const LoggedIn = ({ user }) => {
   return (
     <>
       <Link
-        to="/"
+        to="/cart"
         className={buttonVariants({ variant: 'ghost', size: 'icon' })}
       >
         <ShoppingCartIcon />
@@ -43,7 +43,7 @@ const LoggedIn = ({ user }) => {
           </div>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <Link to="/">
+            <Link to="/profile/">
               <DropdownMenuItem>
                 <User /> Profile
               </DropdownMenuItem>
@@ -61,6 +61,7 @@ const LoggedIn = ({ user }) => {
               onClick={() => {
                 logout();
                 router.invalidate();
+                router.navigate({ to: '/' });
               }}
             >
               <LogOutIcon /> Đăng xuất
@@ -96,7 +97,10 @@ const Navbar = ({ children, className }) => {
         )}
       >
         <div className="flex items-center gap-2">
-          {children} <h1 className="font-bold">Cửa hàng</h1>
+          {children}
+          <Link to="/">
+            <h1 className="font-bold">Cửa hàng</h1>
+          </Link>
         </div>
 
         <div className="flex items-center gap-2">
