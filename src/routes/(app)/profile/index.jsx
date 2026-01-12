@@ -1,10 +1,17 @@
-import { createFileRoute, redirect} from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { MOCK_ORDERS } from '@/api/mockData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion } from '@/components/ui/accordion';
 import { Separator } from '@/components/ui/separator';
 import { VNDformat } from '@/lib/utils';
-import { UserIcon, PhoneIcon, MailIcon, WalletIcon, FileText, RectangleEllipsis } from 'lucide-react';
+import {
+  UserIcon,
+  PhoneIcon,
+  MailIcon,
+  WalletIcon,
+  FileText,
+  RectangleEllipsis,
+} from 'lucide-react';
 import { OrderHistoryItem } from '@/components/OrderHistoryItem';
 import { useState } from 'react';
 
@@ -12,7 +19,7 @@ export const Route = createFileRoute('/(app)/profile/')({
   component: ProfilePage,
   beforeLoad: ({ context }) => {
     if (!context.user) {
-      throw redirect({to: '/auth/login'});
+      throw redirect({ to: '/auth/login' });
     }
   },
   loader: async ({ context }) => {
@@ -44,77 +51,85 @@ function ProfilePage() {
       <div className="container mx-auto -mt-24 px-4">
         <div className="grid gap-8 lg:grid-cols-12">
           <aside className="lg:col-span-4">
-            <Card className="border-0 shadow-xl overflow-hidden">
-              <CardHeader className="bg-white pb-2 flex flex-col items-center">
-                <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center border-4 border-white shadow-md">
+            <Card className="overflow-hidden border-0 shadow-xl">
+              <CardHeader className="flex flex-col items-center bg-white pb-2">
+                <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gray-200 shadow-md">
                   <UserIcon size={40} className="text-black" />
                 </div>
                 <CardTitle className="mt-4 text-2xl font-bold uppercase">
                   {userInfo.name}
                 </CardTitle>
-                <p className="text-sm text-muted-foreground font-semibold tracking-widest">
+                <p className="text-muted-foreground text-sm font-semibold tracking-widest">
                   {userInfo.role}
                 </p>
               </CardHeader>
 
-              <CardContent className="mt-4 space-y-6 flex flex-col items-center">
+              <CardContent className="mt-4 flex flex-col items-center space-y-6">
                 <Separator className="w-full" />
-                
+
                 <div className="w-full max-w-[280px] space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gray-100 rounded-full text-gray-600">
+                    <div className="rounded-full bg-gray-100 p-2 text-gray-600">
                       <MailIcon size={18} />
                     </div>
                     <div>
-                      <p className="text-[10px] text-gray-500 uppercase font-bold">Email</p>
+                      <p className="text-[10px] font-bold text-gray-500 uppercase">
+                        Email
+                      </p>
                       <p className="text-sm font-medium">{userInfo.email}</p>
                     </div>
                   </div>
 
-                {user.email.match(/hv|nt/)?
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gray-100 rounded-full text-gray-600">
-                      <RectangleEllipsis size={18} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-gray-500 uppercase font-bold">Mật khẩu</p>
-                      {isEmailVisible ? (
+                  {user.email.match(/hv|nt/) ? (
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-full bg-gray-100 p-2 text-gray-600">
+                        <RectangleEllipsis size={18} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase">
+                          Mật khẩu
+                        </p>
+                        {isEmailVisible ? (
                           <p
-                            className="text-sm font-medium animate-in fade-in duration-500 cursor-pointer"
+                            className="animate-in fade-in cursor-pointer text-sm font-medium duration-500"
                             onClick={() => setIsEmailVisible(false)}
                           >
                             ********
                           </p>
-                      ): (
-                        <p 
-                          className="text-sm font-normal animate-in fade-in duration-500 cursor-pointer opacity-[50%] hover:opacity-[100%] hover:font-medium"
-                          onClick={() => setIsEmailVisible(true)}
-                        >
-                          Click để hiển thị
-                        </p>
-                      )}
+                        ) : (
+                          <p
+                            className="animate-in fade-in cursor-pointer text-sm font-normal opacity-[50%] duration-500 hover:font-medium hover:opacity-[100%]"
+                            onClick={() => setIsEmailVisible(true)}
+                          >
+                            Click để hiển thị
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                :<></>}
+                  ) : (
+                    <></>
+                  )}
 
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gray-100 rounded-full text-gray-600">
+                    <div className="rounded-full bg-gray-100 p-2 text-gray-600">
                       <PhoneIcon size={18} />
                     </div>
                     <div>
-                      <p className="text-[10px] text-gray-500 uppercase font-bold">Số điện thoại</p>
+                      <p className="text-[10px] font-bold text-gray-500 uppercase">
+                        Số điện thoại
+                      </p>
                       <p className="text-sm font-medium">{userInfo.phone}</p>
                     </div>
                   </div>
                 </div>
 
-                <Card className="w-full max-w-[300px] p-4 border-0 bg-gray-100 shadow-inner">
+                <Card className="w-full max-w-[300px] border-0 bg-gray-100 p-4 shadow-inner">
                   <div className="flex items-center justify-between gap-4">
-                    <div className="p-2 bg-white rounded-full text-black shadow-sm">
+                    <div className="rounded-full bg-white p-2 text-black shadow-sm">
                       <WalletIcon size={20} />
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-gray-500 uppercase font-bold">
+                      <p className="text-xs font-bold text-gray-500 uppercase">
                         Tổng số tiền đã chi tiêu
                       </p>
                       <p className="text-xl font-bold">
@@ -123,14 +138,15 @@ function ProfilePage() {
                     </div>
                   </div>
                 </Card>
-
               </CardContent>
             </Card>
           </aside>
 
           <main className="lg:col-span-8">
-            <div className="flex items-center gap-2 mb-6">
-              <h2 className="text-white text-2xl font-bold uppercase">Lịch sử mua hàng</h2>
+            <div className="mb-6 flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-white uppercase">
+                Lịch sử mua hàng
+              </h2>
               <FileText className="text-white" size={28} />
             </div>
 

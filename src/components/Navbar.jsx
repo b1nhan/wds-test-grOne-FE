@@ -1,4 +1,4 @@
-import { Link, redirect, useRouteContext, useRouter } from '@tanstack/react-router';
+import { Link, useRouteContext, useRouter } from '@tanstack/react-router';
 import { Button, buttonVariants } from './ui/button';
 import {
   LayoutDashboardIcon,
@@ -61,6 +61,7 @@ const LoggedIn = ({ user }) => {
               onClick={() => {
                 logout();
                 router.invalidate();
+                router.navigate({ to: '/' });
               }}
             >
               <LogOutIcon /> Đăng xuất
@@ -96,10 +97,10 @@ const Navbar = ({ children, className }) => {
         )}
       >
         <div className="flex items-center gap-2">
-          {children} 
-            <Link to="/">
-                  <h1 className="font-bold">Cửa hàng</h1>
-            </Link>
+          {children}
+          <Link to="/">
+            <h1 className="font-bold">Cửa hàng</h1>
+          </Link>
         </div>
 
         <div className="flex items-center gap-2">

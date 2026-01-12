@@ -14,13 +14,20 @@ export const productAPI = {
       params: { keyword, ...params },
     });
   },
-  editProducts: (id, data) => {
-    return axiosClient.put(`/products/${id}`, data);
+  // admin required
+  editProducts: (id, data, token) => {
+    return axiosClient.put(`/products/${id}`, data, {
+      headers: { Authorization: token ? `Bearer ${token}` : null },
+    });
   },
-  deleteProducts: (id) => {
-    return axiosClient.delete(`/products/${id}`);
+  deleteProducts: (id, token) => {
+    return axiosClient.delete(`/products/${id}`, {
+      headers: { Authorization: token ? `Bearer ${token}` : null },
+    });
   },
-  createProducts: (data) => {
-    return axiosClient.post(`/products`, data);
+  createProducts: (data, token) => {
+    return axiosClient.post(`/products`, data, {
+      headers: { Authorization: token ? `Bearer ${token}` : null },
+    });
   },
 };

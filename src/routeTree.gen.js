@@ -17,7 +17,7 @@ import { Route as appIndexRouteImport } from './routes/(app)/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as appProfileIndexRouteImport } from './routes/(app)/profile/index'
-import { Route as appCartIndexRouteImport } from './rou./routes/(app)/profile
+import { Route as appCartIndexRouteImport } from './routes/(app)/cart/index'
 import { Route as appProductIdRouteImport } from './routes/(app)/product/$id'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
