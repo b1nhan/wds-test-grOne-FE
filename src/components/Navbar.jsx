@@ -43,7 +43,7 @@ const LoggedIn = ({ user }) => {
           </div>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <Link to="/">
+            <Link to="/profile/">
               <DropdownMenuItem>
                 <User /> Profile
               </DropdownMenuItem>
@@ -61,6 +61,7 @@ const LoggedIn = ({ user }) => {
               onClick={() => {
                 logout();
                 router.invalidate();
+                router.navigate({ to: '/' });
               }}
             >
               <LogOutIcon /> Đăng xuất
@@ -95,9 +96,12 @@ const Navbar = ({ children, className }) => {
           className,
         )}
       >
-        <Link to={'/'} className="flex items-center gap-2">
-          {children} <h1 className="font-bold">Cửa hàng</h1>
-        </Link>
+        <div className="flex items-center gap-2">
+          {children}
+          <Link to="/">
+            <h1 className="font-bold">Cửa hàng</h1>
+          </Link>
+        </div>
 
         <div className="flex items-center gap-2">
           {user ? <LoggedIn user={user} /> : <NotLoggedIn />}
