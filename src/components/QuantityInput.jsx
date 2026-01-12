@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MinusIcon, PlusIcon } from 'lucide-react';
 import { ButtonGroup } from './ui/button-group';
 import { Button } from './ui/button';
@@ -11,11 +11,12 @@ const QuantityInput = ({
   min = -Infinity,
   max = Infinity,
 }) => {
-  const [quantiy, setQuantity] = useState(value);
+  const [quantity, setQuantity] = useState(value);
 
-  useEffect(() => {
-    onChange?.(quantiy);
-  }, [quantiy, onChange]);
+  const handleValueChange = (newValue) => {
+    setQuantity(newValue);
+    onChange?.(newValue);
+  };
 
   return (
     <ButtonGroup>
@@ -23,15 +24,15 @@ const QuantityInput = ({
         type="button"
         size="icon"
         variant="outline"
-        onClick={() => setQuantity(Math.max(0, quantiy - 1))}
+        onClick={() => handleValueChange(Math.max(0, quantity - 1))}
       >
         <MinusIcon />
       </Button>
 
       <Input
         type="number"
-        value={quantiy}
-        onChange={(e) => setQuantity(clamp(e.target.value, min, max))}
+        value={quantity}
+        onChange={(e) => handleValueChange(clamp(e.target.value, min, max))}
         className="w-12 text-center"
         min={min}
         max={max}
@@ -41,7 +42,7 @@ const QuantityInput = ({
         type="button"
         size="icon"
         variant="outline"
-        onClick={() => setQuantity(Math.min(quantiy + 1, max))}
+        onClick={() => handleValueChange(Math.min(quantity + 1, max))}
       >
         <PlusIcon />
       </Button>

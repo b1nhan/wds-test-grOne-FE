@@ -1,111 +1,112 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useState, useCallback } from 'react';
+import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
 import { QuantityInput } from '@/components';
 import { VNDformat } from '@/lib/utils';
-import { getCart, deleteCartItem, updateCart } from '@/lib/untils.cart';
-import ProductCart from '@/components/ProductCart';
+import DataTable from '@/components/DataTable';
+import { Button } from '@/components/ui/button';
+import { ShoppingCartIcon } from 'lucide-react';
+import DeleteCartItemDialog from '@/components/DeleteCartItemDialog';
+import { useCart } from '@/contexts/CartContext';
 
 export const Route = createFileRoute('/(app)/cart/')({
   component: RouteComponent,
+
+  beforeLoad: (e) => {
+    if (!e.context.cart) {
+      throw redirect({ to: '/auth/login' });
+    }
+  },
 });
 
 function RouteComponent() {
-  const [cartItems, setCartItems] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const { cart, updateItem } = useCart();
 
-  const [totalQuantity, setTotalQuantity] = useState(0);
-  const handleQuantityChange = (newValue) => {
-    setTotalQuantity(newValue);
-  };
-  const fetchCart = useCallback(async () => {
-    setLoading(true);
-    try {
-      const cart = await getCart();
-      if (cart.success) {
-        setCartItems(cart.data);
-      }
-    } catch (error) {
-      console.error('Lỗi khi lấy giỏ hàng:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  /** @type {import('@tanstack/react-table').ColumnDef<object>[]} */
+  const columns = [
+    {
+      id: 'image',
+      header: null,
+      size: 96,
+      accessorFn: (obj) => obj.product.imageUrl,
+      cell: (cell) => (
+        <img
+          src={cell.getValue()}
+          className="aspect-square w-full rounded-sm object-cover"
+        />
+      ),
+    },
 
-  let handleDeleteCartItem = async (itemId) => {
-    if (!confirm('Xác nhận xóa sản phẩm?')) return;
-    setLoading(true);
-    try {
-      const response = await deleteCartItem(itemId);
-      if (response.success) {
-        alert('Xóa sản phẩm thành công');
-        setCartItems((prevItems) =>
-          prevItems.filter((item) => item.product.id !== itemId),
+    {
+      id: 'name',
+      header: 'Tên sản phẩm',
+      accessorFn: (obj) => obj.product.name,
+      cell: (cell) => <span className="font-semibold">{cell.getValue()}</span>,
+    },
+
+    {
+      header: 'Số lượng',
+      accessorFn: (obj) => obj,
+      cell: ({ getValue }) => {
+        const product = getValue();
+
+        return (
+          <QuantityInput
+            value={product.quantity}
+            onChange={(value) => updateItem(product.product.id, value)}
+          />
         );
-      } else {
-        alert('Xóa sản phẩm thất bại');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Có lỗi xảy ra');
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
+      },
+    },
 
-  // console.log('Cart Items:', totalQuantity);
-  if (isLoading)
-    return <div className="p-10 text-center">Đang tải giỏ hàng...</div>;
+    {
+      id: 'price',
+      header: 'Đơn giá',
+      accessorFn: (obj) => obj.product.price,
+      cell: ({ getValue }) => VNDformat(getValue()),
+    },
+
+    {
+      id: 'actions',
+      header: null,
+      accessorFn: (obj) => obj.product,
+      cell: ({ getValue }) => (
+        <div className="flex items-center gap-4">
+          <DeleteCartItemDialog product={getValue()} />
+        </div>
+      ),
+    },
+  ];
+
   return (
-    <div className="flex h-full flex-col bg-white font-sans text-zinc-900">
-      {/* <div className="h-[65px] w-full bg-black"></div> */}
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col overflow-hidden px-4 py-8">
-        <h1 className="mb-6 text-2xl font-bold tracking-tighter uppercase">
-          Giỏ hàng của bạn
-        </h1>
+    <>
+      <div className="container mx-auto mt-16 flex flex-col gap-4 px-4">
+        <h1 className="text-2xl font-bold">Giỏ hàng của bạn</h1>
 
-        <div className="flex-1 overflow-hidden border-t-2">
-          <div className="h-full overflow-y-auto pr-2">
-            <div className="sticky top-0 z-10 grid grid-cols-[4fr_1.5fr_1.5fr_1.5fr_1fr] bg-white px-5 py-4 text-xs font-bold tracking-wider uppercase shadow">
-              <div>Sản phẩm</div>
-              <div className="text-center">Đơn giá</div>
-              <div className="text-center">Số lượng</div>
-              <div className="text-center">Số tiền</div>
-              <div className="text-right">Thao tác</div>
-            </div>
+        <DataTable
+          columns={columns}
+          data={cart.data}
+          manualPagination={false}
+        />
+      </div>
 
-            <div className="divide-y divide-zinc-100">
-              {cartItems?.map((item) => (
-                <ProductCart
-                  key={item.product.id}
-                  item={item}
-                  onDelete={handleDeleteCartItem}
-                  setCart={setCartItems}
-                  loading={setLoading}
-                />
-              ))}
-            </div>
+      <div className="fixed inset-x-0 bottom-0 p-4">
+        <div className="container mx-auto flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-muted-foreground">Tổng cộng</h1>
+            <p className="text-xl font-bold">
+              {VNDformat(
+                cart.data.reduce(
+                  (current, product) => product.totalPrice + current,
+                  0,
+                ),
+              )}
+            </p>
           </div>
-        </div>
 
-        <div className="important fixed bottom-0 z-10 m-0 mt-6 flex w-full items-center justify-between gap-4 border-t bg-white px-4 py-6 md:static md:px-0">
-          <div className="flex gap-10 text-lg font-bold">
-            <span className="text-zinc-500 uppercase">Tổng cộng:</span>
-            <span>
-              {cartItems
-                ? VNDformat(
-                    cartItems?.reduce((acc, item) => acc + item.totalPrice, 0),
-                  )
-                : VNDformat(0)}
-            </span>
-          </div>
-          <button className="bg-zinc-900 px-12 py-4 font-bold text-white transition-transform hover:scale-105 active:scale-95">
-            THANH TOÁN NGAY
-          </button>
+          <Button size="lg">
+            <ShoppingCartIcon /> Thanh toán
+          </Button>
         </div>
-      </main>
-    </div>
+      </div>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { VNDformat } from '@/lib/utils';
 import QuantityInput from './QuantityInput';
-import { updateCart } from '@/lib/untils.cart';
+import { updateCart } from '@/lib/utils.cart';
 import { useEffect, useState } from 'react';
 
 let ProductCart = ({ item, onDelete, setCart, loading }) => {
