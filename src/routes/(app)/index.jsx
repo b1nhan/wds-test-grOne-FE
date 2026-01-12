@@ -1,17 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
-import { productAPI } from '@/api/product.api';
 import ProductSearchFilter from '@/components/SearchNFilter';
 import { searchProducts } from '@/lib/utils.productsSearch';
 import ShoeHeader from '@/assets/shoe-header.png';
 import { ShoppingBagIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components';
+import { getProducts } from '@/lib/utils.products';
 
 export const Route = createFileRoute('/(app)/')({
   component: RouteComponent,
   loader: async () => {
-    const data = await productAPI.getProducts({
+    const data = await getProducts({
       page: 1,
       limit: 10,
       sort: 'newest',
@@ -21,6 +21,7 @@ export const Route = createFileRoute('/(app)/')({
       pagination: data.data.pagination,
     };
   },
+  staleTime: 0,
 });
 
 function RouteComponent() {
@@ -107,4 +108,3 @@ function RouteComponent() {
     </>
   );
 }
-

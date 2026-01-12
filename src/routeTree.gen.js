@@ -16,6 +16,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as appIndexRouteImport } from './routes/(app)/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as appProfileIndexRouteImport } from './routes/(app)/profile/index'
 import { Route as appCartIndexRouteImport } from './routes/(app)/cart/index'
 import { Route as appProductIdRouteImport } from './routes/(app)/product/$id'
 
@@ -53,6 +54,11 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 })
+const appProfileIndexRoute = appProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => appRouteRoute,
+})
 const appCartIndexRoute = appCartIndexRouteImport.update({
   id: '/cart/',
   path: '/cart/',
@@ -68,6 +74,7 @@ const appRouteRouteChildren = {
   appIndexRoute: appIndexRoute,
   appProductIdRoute: appProductIdRoute,
   appCartIndexRoute: appCartIndexRoute,
+  appProfileIndexRoute: appProfileIndexRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(

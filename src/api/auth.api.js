@@ -12,4 +12,9 @@ export const authAPI = {
       headers: { Authorization: token ? `Bearer ${token}` : null },
     });
   },
+  userInfo: (token) => {
+    return axiosClient.get('/auth/userInfo', {
+      headers: { Authorization: token ? `Bearer ${token}` : null },
+    });
+  },
 };
