@@ -54,7 +54,7 @@ function ProfilePage() {
       <div className="container mx-auto -mt-24 px-4">
         <div className="grid gap-8 lg:grid-cols-12">
           <aside className="lg:col-span-4">
-            <Card className="overflow-hidden border-0 shadow-xl">
+            <Card className="sticky top-[15vh] overflow-hidden border-0 shadow-xl">
               <CardHeader className="flex flex-col items-center bg-white pb-2">
                 <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gray-200 shadow-md">
                   <UserIcon size={40} className="text-black" />
