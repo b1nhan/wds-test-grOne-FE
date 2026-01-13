@@ -15,7 +15,7 @@ export const cartAPI = {
       },
     );
   },
-  deleteCartItem: (token, itemId) => {
+  deleteProducts: (token, itemId) => {
     return axiosClient.delete(`/cart/items/${itemId}`, {
       headers: { Authorization: token ? `Bearer ${token}` : null },
     });

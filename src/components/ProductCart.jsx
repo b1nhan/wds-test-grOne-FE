@@ -1,34 +1,77 @@
 import { VNDformat } from '@/lib/utils';
 import QuantityInput from './QuantityInput';
-import { updateCart } from '@/lib/untils.cart';
+import { updateCart, deleteCartItem } from '@/lib/utils.cart';
 import { useEffect, useState } from 'react';
-
-let ProductCart = ({ item, onDelete, setCart, loading }) => {
+import toast, { Toaster } from 'react-hot-toast';
+import { Delete } from '@/components/';
+let ProductCart = ({ item, setCart }) => {
+  const [showToaster, setShowToaster] = useState(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const handleQuantityChange = (newValue) => {
     setTotalQuantity(newValue);
   };
-  let handleUpdateCartItem = async (itemId, quantity) => {
-    try {
-      if (quantity === item.quantity) return;
-      const response = await updateCart(itemId, quantity);
-      if (response.success) {
-        alert('Cập nhật số lượng thành công');
-        setCart((prev) =>
-          prev.map((item) =>
-            item.product.id === itemId
-              ? { ...item, quantity, totalPrice: item.product.price * quantity }
-              : item,
-          ),
-        );
-      } else {
-        alert('Cập nhật số lượng thất bại');
-      }
-    } catch (error) {
-      alert('Có lỗi xảy ra');
-    } finally {
-      loading(false);
-    }
+
+  let handleDeleteCartItem = (itemId) => {
+    // if (!confirm('Xác nhận xóa sản phẩm?')) return;
+
+    toast.promise(
+      deleteCartItem(itemId),
+      {
+        loading: 'Đang xóa sản phẩm...',
+        success: (response) => {
+          if (response.success) {
+            setCart((prevItems) =>
+              prevItems.filter((item) => item.product.id !== itemId),
+            );
+            return 'Xóa sản phẩm thành công!';
+          } else {
+            throw new Error('Xóa sản phẩm thất bại');
+          }
+        },
+        error: (err) => {
+          return err.message || 'Có lỗi xảy ra, vui lòng thử lại';
+        },
+      },
+      {
+        duration: 4000,
+        style: {
+          borderRadius: '0px',
+          background: '#333',
+          color: '#fff',
+        },
+      },
+    );
+  };
+  const handleUpdateCartItem = async (itemId, quantity) => {
+    if (quantity === item.quantity) return;
+
+    toast.promise(
+      updateCart(itemId, quantity),
+      {
+        loading: 'Đang cập nhật số lượng...',
+        success: (response) => {
+          if (response.success) {
+            setCart((prev) =>
+              prev.map((i) =>
+                i.product.id === itemId
+                  ? { ...i, quantity, totalPrice: i.product.price * quantity }
+                  : i,
+              ),
+            );
+            return 'Cập nhật số lượng thành công!';
+          } else {
+            throw new Error('Cập nhật thất bại');
+          }
+        },
+        error: (err) => err.message || 'Có lỗi xảy ra khi cập nhật',
+      },
+      {
+        duration: 3000,
+        style: {
+          minWidth: '250px',
+        },
+      },
+    );
   };
 
   useEffect(() => {
@@ -53,7 +96,6 @@ let ProductCart = ({ item, onDelete, setCart, loading }) => {
 
       <div className="text-center text-sm">{VNDformat(item.product.price)}</div>
 
-      {/* Truyền onChange để gọi hàm update từ cha */}
       <QuantityInput
         value={item.quantity}
         max={item.product.stock}
@@ -67,11 +109,24 @@ let ProductCart = ({ item, onDelete, setCart, loading }) => {
       <div className="text-center">
         <button
           className="cursor-pointer text-xs font-black uppercase hover:text-red-600 hover:underline"
-          onClick={() => onDelete(item.product.id)}
+          onClick={() => setShowToaster(true)}
         >
           Xóa
         </button>
       </div>
+      {showToaster ? (
+        <Delete
+          product={item}
+          onClose={() => {
+            setShowToaster(false);
+          }}
+          onDelete={() => {
+            handleDeleteCartItem(item.product.id);
+          }}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

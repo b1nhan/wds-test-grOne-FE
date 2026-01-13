@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Upload, Save, Trash2 } from 'lucide-react';
 import { editProducts } from '@/lib/utils.products';
+import toast, { Toaster } from 'react-hot-toast';
 
 const PopupEdit = ({ product, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({});
@@ -22,18 +23,31 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
     }));
   };
 
-  const handleEdit = async () => {
-    try {
-      const res = await editProducts(product.id, formData);
-      alert('Sửa thành công');
+  const handleEdit = () => {
+    toast.promise(
+      editProducts(product.id, formData),
+      {
+        loading: 'Đang cập nhật sản phẩm...',
+        success: (res) => {
+          if (res.success) {
+            onSuccess();
+            onClose();
+            return 'Cập nhật thành công!';
+          }
 
-      if (res.success) {
-        onSuccess();
-        onClose();
-      }
-    } catch (error) {
-      alert(error?.message || 'Có lỗi xảy ra khi sửa sản phẩm');
-    }
+          throw new Error(res.message || 'Cập nhật thất bại');
+        },
+        error: (err) => {
+          return err.message || 'Có lỗi xảy ra khi sửa sản phẩm';
+        },
+      },
+      {
+        duration: 4000,
+        style: {
+          minWidth: '250px',
+        },
+      },
+    );
   };
 
   return (
