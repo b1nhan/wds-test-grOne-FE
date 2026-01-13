@@ -1,12 +1,39 @@
 import { Edit, Delete } from '@/components';
-
+import { deleteProducts } from '@/lib/utils.products';
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+
 let Card = ({ product, onSuccessC }) => {
   let [showEdit, setShowEdit] = useState(false);
   let [showDelete, setShowDelete] = useState(false);
 
+  const handleDelete = () => {
+    toast.promise(
+      deleteProducts(product.id),
+      {
+        loading: 'Đang xóa sản phẩm...',
+        success: (res) => {
+          if (res.success) {
+            onSuccessC();
+            return 'Xóa sản phẩm thành công!';
+          }
+          throw new Error(res.message || 'Xóa sản phẩm thất bại');
+        },
+        error: (err) => {
+          return err.message || 'Có lỗi xảy ra khi xóa sản phẩm';
+        },
+      },
+      {
+        duration: 4000,
+        style: {
+          minWidth: '250px',
+        },
+      },
+    );
+  };
   return (
     <div className="flex flex-col justify-center p-2 shadow">
+      <Toaster />
       <figure className="relative h-[150px] w-full bg-black">
         <img
           src={product.imageUrl}
@@ -39,6 +66,7 @@ let Card = ({ product, onSuccessC }) => {
         </button>
         {showDelete ? (
           <Delete
+            onDelete={handleDelete}
             onSuccess={onSuccessC}
             product={product}
             onClose={() => setShowDelete(false)}

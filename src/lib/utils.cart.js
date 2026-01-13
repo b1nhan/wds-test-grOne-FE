@@ -33,7 +33,7 @@ export const deleteCartItem = async (itemId) => {
     return null;
   }
   try {
-    const response = await cartAPI.deleteCartItem(token, itemId);
+    const response = await cartAPI.deleteProducts(token, itemId);
     return response;
   } catch {
     return null;

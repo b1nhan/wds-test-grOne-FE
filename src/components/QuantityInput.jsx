@@ -6,7 +6,7 @@ import { Input } from './ui/input';
 import { clamp } from '@/lib/utils';
 
 const QuantityInput = ({
-  value = 0,
+  value = 1,
   onChange,
   min = -Infinity,
   max = Infinity,

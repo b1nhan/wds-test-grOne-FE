@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, Upload, Save } from 'lucide-react';
 import { createProducts } from '@/lib/utils.products';
+import toast, { Toaster } from 'react-hot-toast';
 
 const PopupCreate = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -20,17 +21,32 @@ const PopupCreate = ({ onClose, onSuccess }) => {
     }));
   };
 
-  const handleCreate = async () => {
-    try {
-      const res = await createProducts(formData);
-      alert('Tạo sản phẩm thành công');
-      if (res.success) {
-        onClose();
-        onSuccess();
-      }
-    } catch (error) {
-      alert(error?.message || 'Có lỗi xảy ra khi tạo sản phẩm');
-    }
+  const handleCreate = () => {
+    toast.promise(
+      createProducts(formData),
+      {
+        loading: 'Đang tạo sản phẩm mới...',
+        success: (res) => {
+          if (res.success) {
+            onSuccess();
+            onClose();
+            return 'Tạo sản phẩm thành công! 🎉';
+          }
+
+          throw new Error(res.message || 'Tạo sản phẩm thất bại');
+        },
+        error: (err) => {
+          return err.message || 'Có lỗi xảy ra khi tạo sản phẩm';
+        },
+      },
+      {
+        duration: 4000,
+        style: {
+          minWidth: '250px',
+          fontWeight: '500',
+        },
+      },
+    );
   };
 
   return (

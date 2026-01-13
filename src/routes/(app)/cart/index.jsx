@@ -1,11 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState, useCallback } from 'react';
-import { QuantityInput } from '@/components';
 import { VNDformat } from '@/lib/utils';
-import { getCart, deleteCartItem, updateCart } from '@/lib/untils.cart';
+import { getCart, deleteCartItem, updateCart } from '@/lib/utils.cart';
 import { getProfileDetail } from '@/lib/utils.auth';
-import { createOrder } from '@/lib/utils.order';
 import ProductCart from '@/components/ProductCart';
+import toast, { Toaster } from 'react-hot-toast';
+import CheckoutPopup from '@/components/CheckoutPopup';
+import { useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/(app)/cart/')({
   component: RouteComponent,
@@ -16,15 +17,14 @@ export const Route = createFileRoute('/(app)/cart/')({
 });
 
 function RouteComponent() {
-  const user = Route.useLoaderData();
+  const loaderData = Route.useLoaderData();
+  const user = loaderData.user?.data || loaderData.user;
   //
   const [cartItems, setCartItems] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [isCheckoutOpen, setCheckoutOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const [totalQuantity, setTotalQuantity] = useState(0);
-  const handleQuantityChange = (newValue) => {
-    setTotalQuantity(newValue);
-  };
   const fetchCart = useCallback(async () => {
     setLoading(true);
     try {
@@ -39,40 +39,34 @@ function RouteComponent() {
     }
   }, []);
 
-  let handleDeleteCartItem = async (itemId) => {
-    if (!confirm('Xác nhận xóa sản phẩm?')) return;
-    setLoading(true);
-    try {
-      const response = await deleteCartItem(itemId);
-      if (response.success) {
-        alert('Xóa sản phẩm thành công');
-        setCartItems((prevItems) =>
-          prevItems.filter((item) => item.product.id !== itemId),
-        );
-      } else {
-        alert('Xóa sản phẩm thất bại');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Có lỗi xảy ra');
-    } finally {
-      setLoading(false);
-    }
-  };
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
 
-  // console.log('Cart Items:', totalQuantity);
+  const handleOrderSuccess = () => {
+    setCheckoutOpen(false);
+    setCartItems([]);
+    navigate({ to: '/profile' });
+  };
+
   if (isLoading)
     return <div className="p-10 text-center">Đang tải giỏ hàng...</div>;
   return (
     <div className="flex h-full flex-col bg-white font-sans text-zinc-900">
-      {/* <div className="h-[65px] w-full bg-black"></div> */}
+      <Toaster />
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col overflow-hidden px-4 py-8">
         <h1 className="mb-6 text-2xl font-bold tracking-tighter uppercase">
           Giỏ hàng của bạn
         </h1>
+
+        {isCheckoutOpen && (
+          <CheckoutPopup
+            user={user}
+            cartItems={cartItems}
+            onClose={() => setCheckoutOpen(false)}
+            onOrderSuccess={handleOrderSuccess}
+          />
+        )}
 
         <div className="flex-1 overflow-hidden border-t-2">
           <div className="h-full overflow-y-auto pr-2">
@@ -84,12 +78,11 @@ function RouteComponent() {
               <div className="text-right">Thao tác</div>
             </div>
 
-            <div className="divide-y divide-zinc-100">
+            <div className="min-h-[300px] divide-y divide-zinc-100">
               {cartItems?.map((item) => (
                 <ProductCart
                   key={item.product.id}
                   item={item}
-                  onDelete={handleDeleteCartItem}
                   setCart={setCartItems}
                   loading={setLoading}
                 />
@@ -100,7 +93,7 @@ function RouteComponent() {
 
         <div className="important fixed bottom-0 z-10 m-0 mt-6 flex w-full items-center justify-between gap-4 border-t bg-white px-4 py-6 md:static md:px-0">
           <div className="flex gap-10 text-lg font-bold">
-            <span className="text-zinc-500 uppercase">Tổng cộng:</span>
+            <span className="uppercase">Tổng cộng:</span>
             <span>
               {cartItems
                 ? VNDformat(
@@ -110,8 +103,9 @@ function RouteComponent() {
             </span>
           </div>
           <button
-            className="bg-zinc-900 px-12 py-4 font-bold text-white transition-transform hover:scale-105 active:scale-95"
-            onClick={() => createOrder(user.user.phone.toString())}
+            className="cursor-pointer rounded-lg bg-zinc-900 px-12 py-4 font-bold text-white transition-transform disabled:cursor-default disabled:bg-gray-300"
+            disabled={!cartItems || cartItems.length === 0}
+            onClick={() => setCheckoutOpen(true)}
           >
             THANH TOÁN NGAY
           </button>
