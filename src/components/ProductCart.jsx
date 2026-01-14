@@ -55,9 +55,8 @@ let ProductCart = ({ item, setCart, selectedIds, toggleSelectItem }) => {
               ),
             );
             return 'Cập nhật số lượng thành công!';
-          } else {
-            throw new Error('Cập nhật thất bại');
           }
+          throw new Error(response?.message || 'Cập nhật số lượng thất bại');
         },
         error: (err) => err.message || 'Có lỗi xảy ra khi cập nhật',
       },
