@@ -4,7 +4,7 @@ import { createOrder } from '@/lib/utils.order';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { UserIcon, PhoneIcon, MailIcon, PackageIcon, X } from 'lucide-react';
+import { UserIcon, PhoneIcon, PackageIcon, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const CheckoutPopup = ({ user, cartItems, onClose, onOrderSuccess }) => {

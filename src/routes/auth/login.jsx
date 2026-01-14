@@ -2,10 +2,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { login } from '@/lib/utils.auth';
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Link,
+  useRouter,
+  redirect,
+} from '@tanstack/react-router';
 import { useState } from 'react';
 
 export const Route = createFileRoute('/auth/login')({
+  beforeLoad: ({ context }) => {
+    if (context.user) {
+      throw redirect({
+        to: '/profile',
+      });
+    }
+  },
   component: RouteComponent,
 });
 
