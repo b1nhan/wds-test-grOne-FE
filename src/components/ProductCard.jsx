@@ -17,15 +17,17 @@ const ProductCard = ({ product }) => {
       params={{ productId: product.id }}
       className="flex flex-col duration-150 hover:scale-105"
     >
-      <figure className="bg-secondary mb-4 aspect-square w-full overflow-hidden">
+      <figure className="bg-secondary mb-4 aspect-square w-full overflow-hidden rounded-xl">
         <img
           src={product.imageUrl}
           alt={product.name}
-          className="h-full w-full object-cover"
+          className="h-full w-full rounded-xl object-cover"
         />
       </figure>
 
-      <h1>{product.name}</h1>
+      <h1 className="overflow-hidden font-bold text-ellipsis whitespace-nowrap">
+        {product.name}
+      </h1>
       <p className="inline-flex items-center gap-2 font-medium">
         {VNDformat(product.price)}
         <span className="text-muted-foreground text-sm font-normal">•</span>

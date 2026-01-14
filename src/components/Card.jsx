@@ -32,18 +32,17 @@ let Card = ({ product, onSuccessC }) => {
     );
   };
   return (
-    <div className="flex flex-col justify-center p-2 shadow">
-      <Toaster />
-      <figure className="relative h-[150px] w-full bg-black">
+    <div className="group rounded-lg border p-2 shadow-md transition-shadow duration-300 hover:shadow-xl">
+      <figure className="relative h-[160px] w-full overflow-hidden rounded-lg">
         <img
           src={product.imageUrl}
           alt={product.name}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className="h-full w-full rounded-lg object-cover transition-transform duration-300 group-hover:scale-105"
         ></img>
       </figure>
-      <div className="w-full">
+      <div className="flex w-full items-center justify-center gap-2 pt-3">
         <button
-          className="h-10 w-[50%] cursor-pointer bg-green-400"
+          className="flex h-9 w-[50%] cursor-pointer items-center justify-center rounded-lg border-2 border-green-400 bg-green-300 py-3 hover:bg-green-400"
           onClick={() => setShowEdit(!showEdit)}
         >
           Sửa
@@ -59,8 +58,8 @@ let Card = ({ product, onSuccessC }) => {
         )}
 
         <button
-          className="h-10 w-[50%] cursor-pointer bg-red-400"
-          onClick={() => setShowDelete(!showEdit)}
+          className="h-9 w-[50%] cursor-pointer rounded-lg border-2 border-red-400 bg-red-300 hover:bg-red-400"
+          onClick={() => setShowDelete(!showDelete)}
         >
           Xóa
         </button>
@@ -75,7 +74,7 @@ let Card = ({ product, onSuccessC }) => {
           <></>
         )}
       </div>
-      <div className="mt-2 w-full overflow-hidden text-ellipsis whitespace-nowrap">
+      <div className="mt-2 w-full overflow-hidden text-center font-bold text-ellipsis whitespace-nowrap">
         {product.name}
       </div>
     </div>

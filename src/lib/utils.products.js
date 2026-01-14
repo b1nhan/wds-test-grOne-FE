@@ -1,8 +1,8 @@
 import { productAPI } from '@/api/product.api';
 
-export const getProducts = async () => {
+export const getProducts = async (params) => {
   try {
-    const res = await productAPI.getProducts();
+    const res = await productAPI.getProducts(params);
     return res;
   } catch (err) {
     return err;
