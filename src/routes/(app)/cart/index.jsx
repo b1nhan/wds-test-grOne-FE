@@ -49,6 +49,27 @@ function RouteComponent() {
     navigate({ to: '/profile' });
   };
 
+  const [selectedIds, setSelectedIds] = useState([]);
+  const toggleSelectItem = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id)
+        ? prev.filter((itemId) => itemId !== id)
+        : [...prev, id],
+    );
+  };
+  const toggleSelectAll = () => {
+    if (selectedIds.length === cartItems.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(cartItems.map((item) => item.product.id));
+    }
+  };
+  const selectedCartItems = cartItems.filter((item) =>
+    selectedIds.includes(item.product.id),
+  );
+
+  console.log('cartItems', selectedIds);
+
   if (isLoading)
     return <div className="p-10 text-center">Đang tải giỏ hàng...</div>;
   return (
@@ -62,7 +83,7 @@ function RouteComponent() {
         {isCheckoutOpen && (
           <CheckoutPopup
             user={user}
-            cartItems={cartItems}
+            cartItems={selectedCartItems}
             onClose={() => setCheckoutOpen(false)}
             onOrderSuccess={handleOrderSuccess}
           />
@@ -70,7 +91,17 @@ function RouteComponent() {
 
         <div className="flex-1 overflow-hidden border-t-2">
           <div className="h-full overflow-y-auto pr-2">
-            <div className="sticky top-0 z-10 grid grid-cols-[4fr_1.5fr_1.5fr_1.5fr_1fr] bg-white px-5 py-4 text-xs font-bold tracking-wider uppercase shadow">
+            <div className="sticky top-0 z-10 grid grid-cols-[0.5fr_4fr_1.5fr_1.5fr_1.5fr_1fr] bg-white px-5 py-4 text-xs font-bold tracking-wider uppercase shadow">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  onChange={toggleSelectAll}
+                  checked={
+                    cartItems.length > 0 &&
+                    selectedIds.length === cartItems.length
+                  }
+                />
+              </div>
               <div>Sản phẩm</div>
               <div className="text-center">Đơn giá</div>
               <div className="text-center">Số lượng</div>
@@ -80,37 +111,44 @@ function RouteComponent() {
 
             <div className="min-h-[300px] divide-y divide-zinc-100">
               {cartItems?.map((item) => (
-                <ProductCart
-                  key={item.product.id}
-                  item={item}
-                  setCart={setCartItems}
-                  loading={setLoading}
-                />
+                <div key={item.product.id} className="flex items-center">
+                  <div className="flex-1">
+                    <ProductCart
+                      item={item}
+                      setCart={setCartItems}
+                      loading={setLoading}
+                      toggleSelectItem={toggleSelectItem}
+                      selectedIds={selectedIds}
+                    />
+                  </div>
+                </div>
               ))}
             </div>
           </div>
         </div>
-
-        <div className="important fixed bottom-0 z-10 m-0 mt-6 flex w-full items-center justify-between gap-4 border-t bg-white px-4 py-6 md:static md:px-0">
-          <div className="flex gap-10 text-lg font-bold">
-            <span className="uppercase">Tổng cộng:</span>
-            <span>
-              {cartItems
-                ? VNDformat(
-                    cartItems?.reduce((acc, item) => acc + item.totalPrice, 0),
-                  )
-                : VNDformat(0)}
-            </span>
-          </div>
-          <button
-            className="cursor-pointer rounded-lg bg-zinc-900 px-12 py-4 font-bold text-white transition-transform disabled:cursor-default disabled:bg-gray-300"
-            disabled={!cartItems || cartItems.length === 0}
-            onClick={() => setCheckoutOpen(true)}
-          >
-            THANH TOÁN NGAY
-          </button>
-        </div>
       </main>
+      <div className="fixed bottom-0 z-10 m-0 mt-6 flex w-full justify-between gap-4 border-t bg-white px-4 py-6 md:static md:px-50">
+        <div className="flex gap-10 text-lg font-bold">
+          <span className="uppercase">Tổng cộng:</span>
+          <span>
+            {selectedIds.length > 0
+              ? VNDformat(
+                  selectedCartItems?.reduce(
+                    (acc, item) => acc + item.totalPrice,
+                    0,
+                  ),
+                )
+              : VNDformat(0)}
+          </span>
+        </div>
+        <button
+          className="cursor-pointer rounded-lg bg-zinc-900 px-4 pr-4 font-bold text-white transition-transform disabled:cursor-default disabled:bg-gray-300 md:px-12 md:py-4"
+          disabled={!cartItems || cartItems.length === 0}
+          onClick={() => setCheckoutOpen(true)}
+        >
+          THANH TOÁN NGAY
+        </button>
+      </div>
     </div>
   );
 }

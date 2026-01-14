@@ -31,7 +31,9 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
         success: (res) => {
           if (res.success) {
             onSuccess();
-            onClose();
+            setTimeout(() => {
+              onClose();
+            }, 1000);
             return 'Cập nhật thành công!';
           }
 
@@ -52,6 +54,7 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+      <Toaster />
       <form
         onSubmit={(e) => {
           e.preventDefault();
