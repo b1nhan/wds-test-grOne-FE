@@ -30,7 +30,7 @@ function RouteComponent() {
     try {
       const cart = await getCart();
       if (cart.success) {
-        setCartItems(cart.data);
+        setCartItems(cart.data.items);
       }
     } catch (error) {
       console.error('Lỗi khi lấy giỏ hàng:', error);

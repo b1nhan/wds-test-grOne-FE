@@ -52,7 +52,7 @@ const CheckoutPopup = ({ user, cartItems, onClose, onOrderSuccess }) => {
                 </div>
                 <div>
                   <p className="flex gap-1 font-bold">
-                    Tên: <p className="font-medium">{user.name}</p>
+                    Tên: <span className="font-medium">{user.name}</span>
                   </p>
                 </div>
               </div>
@@ -62,7 +62,8 @@ const CheckoutPopup = ({ user, cartItems, onClose, onOrderSuccess }) => {
                 </div>{' '}
                 <div>
                   <p className="flex gap-1 font-bold">
-                    SĐT nhận hàng: <p className="font-medium">{user.phone}</p>
+                    SĐT nhận hàng:{' '}
+                    <span className="font-medium">{user.phone}</span>
                   </p>
                 </div>
               </div>
