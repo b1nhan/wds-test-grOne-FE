@@ -29,7 +29,9 @@ const PopupCreate = ({ onClose, onSuccess }) => {
         success: (res) => {
           if (res.success) {
             onSuccess();
-            onClose();
+            setTimeout(() => {
+              onClose();
+            }, 1000);
             return 'Tạo sản phẩm thành công! 🎉';
           }
 
@@ -51,6 +53,7 @@ const PopupCreate = ({ onClose, onSuccess }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+      <Toaster />
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -65,7 +68,7 @@ const PopupCreate = ({ onClose, onSuccess }) => {
           </h2>
           <button
             onClick={onClose}
-            className="rounded-full p-2 hover:bg-gray-100"
+            className="cursor-pointer rounded-full p-2 hover:bg-gray-100"
           >
             <X className="h-6 w-6" />
           </button>
@@ -168,13 +171,13 @@ const PopupCreate = ({ onClose, onSuccess }) => {
         <div className="flex justify-end gap-4 border-t bg-gray-50 px-8 py-5">
           <button
             onClick={onClose}
-            className="rounded-xl px-6 py-2.5 font-semibold text-gray-500 hover:bg-gray-100"
+            className="cursor-pointer rounded-xl px-6 py-2.5 font-semibold text-gray-500 hover:bg-gray-100"
           >
             Hủy
           </button>
           <button
             type="submit"
-            className="flex items-center gap-2 rounded-xl bg-lime-500 px-8 py-2.5 font-bold text-black shadow hover:bg-lime-600 active:scale-95"
+            className="flex cursor-pointer items-center gap-2 rounded-xl bg-lime-500 px-8 py-2.5 font-bold text-black shadow hover:bg-lime-600 active:scale-95"
           >
             <Save className="h-5 w-5" />
             Tạo sản phẩm
