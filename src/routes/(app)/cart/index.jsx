@@ -4,6 +4,8 @@ import { VNDformat } from '@/lib/utils';
 import ProductCart from '@/components/ProductCart';
 import CheckoutPopup from '@/components/CheckoutPopup';
 import { useNavigate } from '@tanstack/react-router';
+import { CreditCardIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute('/(app)/cart/')({
   component: RouteComponent,
@@ -33,9 +35,7 @@ function RouteComponent() {
   return (
     <div className="flex h-full flex-col bg-white font-sans text-zinc-900">
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col overflow-hidden px-4 py-8">
-        <h1 className="mb-6 text-2xl font-bold tracking-tighter uppercase">
-          Giỏ hàng của bạn
-        </h1>
+        <h1 className="mb-6 text-2xl font-bold">Giỏ hàng của bạn</h1>
 
         {isCheckoutOpen && (
           <CheckoutPopup
@@ -48,14 +48,6 @@ function RouteComponent() {
 
         <div className="flex-1 overflow-hidden border-t-2">
           <div className="h-full overflow-y-auto pr-2">
-            <div className="sticky top-0 z-10 grid grid-cols-[4fr_1.5fr_1.5fr_1.5fr_1fr] bg-white px-5 py-4 text-xs font-bold tracking-wider uppercase shadow">
-              <div>Sản phẩm</div>
-              <div className="text-center">Đơn giá</div>
-              <div className="text-center">Số lượng</div>
-              <div className="text-center">Số tiền</div>
-              <div className="text-right">Thao tác</div>
-            </div>
-
             <div className="flex min-h-[300px] flex-col divide-y divide-zinc-100">
               {cartItems?.length > 0 ? (
                 cartItems.map((item) => (
@@ -77,7 +69,7 @@ function RouteComponent() {
 
         <div className="important fixed bottom-0 z-10 m-0 mt-6 flex w-full items-center justify-between gap-4 border-t bg-white px-4 py-6 md:static md:px-0">
           <div className="flex gap-10 text-lg font-bold">
-            <span className="uppercase">Tổng cộng:</span>
+            <span>Tổng cộng:</span>
             <span>
               {cartItems
                 ? VNDformat(
@@ -86,13 +78,14 @@ function RouteComponent() {
                 : VNDformat(0)}
             </span>
           </div>
-          <button
-            className="cursor-pointer rounded-lg bg-zinc-900 px-12 py-4 font-bold text-white transition-transform disabled:cursor-default disabled:bg-gray-300"
+          <Button
+            size="lg"
             disabled={!cartItems || cartItems.length === 0}
             onClick={() => setCheckoutOpen(true)}
           >
-            THANH TOÁN NGAY
-          </button>
+            <CreditCardIcon />
+            Thanh Toán
+          </Button>
         </div>
       </main>
     </div>

@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Delete } from '@/components/';
 import { useRouter } from '@tanstack/react-router';
+import { Button } from './ui/button';
+import { TrashIcon } from 'lucide-react';
 let ProductCart = ({ item, setCart }) => {
   const router = useRouter();
   const [showToaster, setShowToaster] = useState(false);
@@ -56,8 +58,6 @@ let ProductCart = ({ item, setCart }) => {
                 : i,
             ),
           );
-
-          toast.success('Cập nhật số lượng thành công!');
         } else {
           throw new Error('Cập nhật thất bại');
         }
@@ -73,40 +73,39 @@ let ProductCart = ({ item, setCart }) => {
 
   // console.log(totalQuantity);
   return (
-    <div className="grid grid-cols-[4fr_1.5fr_1.5fr_1.5fr_1fr] items-center py-6">
-      <div className="flex items-center gap-6">
-        <div className="h-20 w-20 flex-shrink-0 bg-zinc-100">
-          <img
-            src={item.product.imageUrl}
-            alt={item.product.name}
-            className="h-full w-full object-cover mix-blend-multiply"
-          />
-        </div>
-        <span className="text-sm font-semibold">{item.product.name}</span>
-      </div>
-
-      <div className="text-center text-sm">{VNDformat(item.product.price)}</div>
-
-      <QuantityInput
-        value={item.quantity}
-        min={1}
-        max={item.product.stock}
-        onChange={handleQuantityChange}
+    <div className="grid grid-cols-[8rem_1fr_1fr_1fr] grid-rows-[auto_1fr] items-center gap-x-8 gap-y-2 py-6">
+      <img
+        src={item.product.imageUrl}
+        alt={item.product.name}
+        className="row-span-2 aspect-square w-full rounded-lg mix-blend-multiply"
       />
 
-      <div className="text-center text-sm font-bold">
-        {VNDformat(item.totalPrice)}
-      </div>
+      <h1 className="text-lg font-semibold">{item.product.name}</h1>
 
-      <div className="text-center">
-        <button
-          className="cursor-pointer text-xs font-black uppercase hover:text-red-600 hover:underline"
+      <div className="col-start-2 row-start-2 flex items-center gap-2 self-start">
+        <QuantityInput
+          value={item.quantity}
+          min={1}
+          max={item.product.stock}
+          onChange={handleQuantityChange}
+        />
+
+        <Button
+          size="icon"
+          variant="ghost"
           onClick={() => setShowToaster(true)}
         >
-          Xóa
-        </button>
+          <TrashIcon />
+        </Button>
       </div>
-      {showToaster ? (
+
+      <p className="text-muted-foreground ml-auto">
+        {VNDformat(item.product.price)}
+      </p>
+
+      <div className="ml-auto font-semibold">{VNDformat(item.totalPrice)}</div>
+
+      {showToaster && (
         <Delete
           product={item}
           onClose={() => {
@@ -116,8 +115,6 @@ let ProductCart = ({ item, setCart }) => {
             handleDeleteCartItem(item.product.id);
           }}
         />
-      ) : (
-        <></>
       )}
     </div>
   );
