@@ -40,4 +40,4 @@ export const register = async (data) => {
   await login({ email: data.email, password: data.password });
 };
 
-export const logout = () => localStorage.setItem('token', null);
+export const logout = () => localStorage.removeItem('token');

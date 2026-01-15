@@ -1,11 +1,24 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { login } from '@/lib/utils.auth';
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
-import { useState } from 'react';
+import { login, getProfile } from '@/lib/utils.auth';
+import {
+  createFileRoute,
+  Link,
+  useRouter,
+  redirect,
+  useRouteContext,
+} from '@tanstack/react-router';
+import { use, useState } from 'react';
 
 export const Route = createFileRoute('/auth/login')({
+  beforeLoad: ({ context }) => {
+    if (context.user) {
+      throw redirect({
+        to: '/profile',
+      });
+    }
+  },
   component: RouteComponent,
 });
 
@@ -24,7 +37,14 @@ function RouteComponent() {
 
     try {
       await login({ email, password });
-      router.navigate({ to: '/' });
+      const user = await getProfile();
+      if (user.role.toUpperCase() === 'USER') {
+        router.navigate({ to: '/profile' });
+      } else if (user.role.toUpperCase() === 'ADMIN') {
+        router.navigate({ to: '/admin' });
+      } else {
+        router.navigate({ to: '/' });
+      }
     } catch (err) {
       setError(err.message);
     }

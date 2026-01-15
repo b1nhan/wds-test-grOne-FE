@@ -46,7 +46,8 @@ export const OrderHistoryItem = ({ order }) => {
             </div>
             <div className="text-muted-foreground flex items-center gap-2 text-sm">
               <CalendarIcon size={14} />
-              {new Date(order.createdAt).toLocaleDateString('vi-VN')}
+              <p>{new Date(order.createdAt).toLocaleDateString('vi-VN')}</p>
+              <p>{new Date(order.createdAt).toLocaleTimeString('vi-VN')}</p>
             </div>
           </div>
 

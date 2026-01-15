@@ -13,6 +13,7 @@ import { PlusIcon } from 'lucide-react';
 export const Route = createFileRoute('/admin/')({
   component: RouteComponent,
 });
+import toast, { Toaster } from 'react-hot-toast';
 
 const fetchProducts = async ({ keyword, pageData }) => {
   const data = await productAPI.getProducts({
@@ -52,7 +53,8 @@ function RouteComponent() {
   const totalPages = query.data?.pagination?.totalPages ?? 0;
   const currentPage = pageData.pageIndex + 1;
   return (
-    <div className="flex flex-col items-center justify-center px-10">
+    <div className="flex flex-col items-center justify-center px-10 pt-8 xl:h-[calc(100vh-70px)] xl:overflow-hidden">
+      <Toaster />
       <div className="mt-2 mb-5 flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold sm:flex-1">Quản lý sản phẩm</h1>
         <>
@@ -83,7 +85,7 @@ function RouteComponent() {
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-green-500 border-t-transparent"></div>
           </div>
         ) : products.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+          <div className="grid h-full grid-cols-2 gap-4 sm:grid-cols-5">
             {products.map((product) => (
               <Card
                 onSuccessC={handleActionSuccess}

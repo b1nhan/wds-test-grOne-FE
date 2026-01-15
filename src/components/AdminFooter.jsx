@@ -6,7 +6,7 @@ let AdminFooter = ({ total, curr, data, onPageChange }) => {
       <div className="container mx-auto flex items-center justify-center gap-6 px-10">
         <Button
           variant="outline"
-          className="border-gray-300 transition-colors hover:border-lime-500 hover:text-lime-600"
+          className="cursor-pointer border-gray-300 transition-colors hover:border-lime-500 hover:text-lime-600"
           disabled={data.pageIndex === 0}
           onClick={() =>
             onPageChange((prev) => ({
@@ -28,7 +28,7 @@ let AdminFooter = ({ total, curr, data, onPageChange }) => {
 
         <Button
           variant="outline"
-          className="border-gray-300 transition-colors hover:border-lime-500 hover:text-lime-600"
+          className="cursor-pointer border-gray-300 transition-colors hover:border-lime-500 hover:text-lime-600"
           disabled={curr >= total}
           onClick={() =>
             onPageChange((prev) => ({
