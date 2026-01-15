@@ -1,11 +1,12 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { VNDformat } from '@/lib/utils';
 import ProductCart from '@/components/ProductCart';
 import CheckoutPopup from '@/components/CheckoutPopup';
 import { useNavigate } from '@tanstack/react-router';
 import { CreditCardIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getCart, deleteCartItem, updateCart } from '@/lib/utils.cart';
 
 export const Route = createFileRoute('/(app)/cart/')({
   component: RouteComponent,
@@ -19,7 +20,7 @@ export const Route = createFileRoute('/(app)/cart/')({
 
 function RouteComponent() {
   const { user, cart } = Route.useRouteContext();
-  const [cartItems, setCartItems] = useState(cart.data);
+  const [cartItems, setCartItems] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [isCheckoutOpen, setCheckoutOpen] = useState(false);
   const navigate = useNavigate();
