@@ -13,6 +13,7 @@ import { PlusIcon } from 'lucide-react';
 export const Route = createFileRoute('/admin/')({
   component: RouteComponent,
 });
+import toast, { Toaster } from 'react-hot-toast';
 
 const fetchProducts = async ({ keyword, pageData }) => {
   const data = await productAPI.getProducts({
@@ -52,7 +53,8 @@ function RouteComponent() {
   const totalPages = query.data?.pagination?.totalPages ?? 0;
   const currentPage = pageData.pageIndex + 1;
   return (
-    <div className="flex flex-col items-center justify-center px-10 pt-8 md:h-[calc(100vh-70px)] md:overflow-hidden">
+    <div className="flex flex-col items-center justify-center px-10 pt-8 xl:h-[calc(100vh-70px)] xl:overflow-hidden">
+      <Toaster />
       <div className="mt-2 mb-5 flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold sm:flex-1">Quản lý sản phẩm</h1>
         <>

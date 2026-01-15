@@ -4,7 +4,7 @@ import { updateCart, deleteCartItem } from '@/lib/utils.cart';
 import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Delete } from '@/components/';
-let ProductCart = ({ item, setCart }) => {
+let ProductCart = ({ item, setCart, selectedIds, toggleSelectItem }) => {
   const [showToaster, setShowToaster] = useState(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const handleQuantityChange = (newValue) => {
@@ -12,8 +12,6 @@ let ProductCart = ({ item, setCart }) => {
   };
 
   let handleDeleteCartItem = (itemId) => {
-    // if (!confirm('Xác nhận xóa sản phẩm?')) return;
-
     toast.promise(
       deleteCartItem(itemId),
       {
@@ -35,9 +33,7 @@ let ProductCart = ({ item, setCart }) => {
       {
         duration: 4000,
         style: {
-          borderRadius: '0px',
-          background: '#333',
-          color: '#fff',
+          minWidth: '250px',
         },
       },
     );
@@ -59,9 +55,8 @@ let ProductCart = ({ item, setCart }) => {
               ),
             );
             return 'Cập nhật số lượng thành công!';
-          } else {
-            throw new Error('Cập nhật thất bại');
           }
+          throw new Error(response?.message || 'Cập nhật số lượng thất bại');
         },
         error: (err) => err.message || 'Có lỗi xảy ra khi cập nhật',
       },
@@ -82,7 +77,14 @@ let ProductCart = ({ item, setCart }) => {
 
   // console.log(totalQuantity);
   return (
-    <div className="grid grid-cols-[4fr_1.5fr_1.5fr_1.5fr_1fr] items-center py-6">
+    <div className="grid grid-cols-[0.5fr_4fr_1.5fr_1.5fr_1.5fr_1fr] items-center py-6">
+      <div className="pl-5">
+        <input
+          type="checkbox"
+          checked={selectedIds.includes(item.product.id)}
+          onChange={() => toggleSelectItem(item.product.id)}
+        />
+      </div>
       <div className="flex items-center gap-6">
         <div className="h-20 w-20 flex-shrink-0 bg-zinc-100">
           <img

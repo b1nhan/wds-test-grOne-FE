@@ -3,7 +3,7 @@ import { X, Upload, Save, Trash2 } from 'lucide-react';
 import { editProducts } from '@/lib/utils.products';
 import toast, { Toaster } from 'react-hot-toast';
 
-const PopupEdit = ({ product, onClose, onSuccess }) => {
+const PopupEdit = ({ product, onClose, onSuccess, onDelete }) => {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
@@ -31,7 +31,9 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
         success: (res) => {
           if (res.success) {
             onSuccess();
-            onClose();
+            setTimeout(() => {
+              onClose();
+            }, 1000);
             return 'Cập nhật thành công!';
           }
 
@@ -51,7 +53,11 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <Toaster />
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -173,7 +179,13 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
 
         {/* Footer */}
         <div className="flex items-center justify-between border-t bg-gray-50 px-8 py-5">
-          <button className="flex items-center gap-2 text-red-500 hover:text-red-700">
+          <button
+            className="flex cursor-pointer items-center gap-2 text-red-500 hover:text-red-700"
+            onClick={(e) => {
+              e.preventDefault();
+              onDelete();
+            }}
+          >
             <Trash2 className="h-5 w-5" />
             Xóa sản phẩm
           </button>
@@ -181,13 +193,13 @@ const PopupEdit = ({ product, onClose, onSuccess }) => {
           <div className="flex gap-4">
             <button
               onClick={onClose}
-              className="rounded-xl px-6 py-2.5 font-semibold text-gray-500 hover:bg-gray-100"
+              className="cursor-pointer rounded-xl px-6 py-2.5 font-semibold text-gray-500 hover:bg-gray-100"
             >
               Hủy
             </button>
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-xl bg-lime-500 px-8 py-2.5 font-bold text-black shadow hover:bg-lime-600 active:scale-95"
+              className="flex cursor-pointer items-center gap-2 rounded-xl bg-lime-500 px-8 py-2.5 font-bold text-black shadow hover:bg-lime-600 active:scale-95"
             >
               <Save className="h-5 w-5" />
               Lưu thay đổi

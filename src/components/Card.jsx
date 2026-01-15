@@ -15,9 +15,12 @@ let Card = ({ product, onSuccessC }) => {
         success: (res) => {
           if (res.success) {
             onSuccessC();
+            setTimeout(() => {
+              setShowDelete(false);
+            }, 1000);
             return 'Xóa sản phẩm thành công!';
           }
-          throw new Error(res.message || 'Xóa sản phẩm thất bại');
+          throw new Error('Xóa sản phẩm thất bại');
         },
         error: (err) => {
           return err.message || 'Có lỗi xảy ra khi xóa sản phẩm';
@@ -32,8 +35,13 @@ let Card = ({ product, onSuccessC }) => {
     );
   };
   return (
-    <div className="group rounded-lg border p-2 shadow-md transition-shadow duration-300 hover:shadow-xl">
-      <figure className="relative h-[160px] w-full overflow-hidden rounded-lg">
+    <div
+      className="group rounded-lg border p-2 shadow-md transition-shadow duration-300 hover:shadow-xl"
+      onClick={() => {
+        setShowEdit(!showEdit);
+      }}
+    >
+      <figure className="relative h-[160px] w-full cursor-pointer overflow-hidden rounded-lg">
         <img
           src={product.imageUrl}
           alt={product.name}
@@ -43,7 +51,10 @@ let Card = ({ product, onSuccessC }) => {
       <div className="flex w-full items-center justify-center gap-2 pt-3">
         <button
           className="flex h-9 w-[50%] cursor-pointer items-center justify-center rounded-lg border-2 border-green-400 bg-green-300 py-3 hover:bg-green-400"
-          onClick={() => setShowEdit(!showEdit)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowEdit(!showEdit);
+          }}
         >
           Sửa
         </button>
@@ -52,6 +63,7 @@ let Card = ({ product, onSuccessC }) => {
             onSuccess={onSuccessC}
             product={product}
             onClose={() => setShowEdit(false)}
+            onDelete={() => setShowDelete(true)}
           ></Edit>
         ) : (
           <></>
@@ -59,7 +71,10 @@ let Card = ({ product, onSuccessC }) => {
 
         <button
           className="h-9 w-[50%] cursor-pointer rounded-lg border-2 border-red-400 bg-red-300 hover:bg-red-400"
-          onClick={() => setShowDelete(!showDelete)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowDelete(!showDelete);
+          }}
         >
           Xóa
         </button>

@@ -42,12 +42,14 @@ export const deleteCartItem = async (itemId) => {
 export const updateCart = async (itemId, quantity) => {
   const token = localStorage.getItem('token');
   if (!token) {
-    return null;
+    throw new Error('Bạn cần đăng nhập để thực hiện thao tác này');
   }
   try {
     const response = await cartAPI.updateCartItem(token, itemId, quantity);
     return response;
-  } catch {
-    return null;
+  } catch (error) {
+    const errorMsg =
+      error.response?.data?.message || 'Không thể kết nối đến máy chủ';
+    throw new Error(errorMsg);
   }
 };

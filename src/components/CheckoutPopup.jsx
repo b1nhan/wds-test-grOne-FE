@@ -45,24 +45,25 @@ const CheckoutPopup = ({ user, cartItems, onClose, onOrderSuccess }) => {
 
         <div className="flex-1 space-y-8 overflow-y-auto px-10 pb-10">
           <section>
-            <div className="flex justify-around gap-4 rounded-lg bg-white p-4 shadow-sm md:grid-cols-2">
+            <div className="flex-col justify-around gap-4 rounded-lg bg-white p-4 shadow-sm md:flex md:flex-row">
               <div className="flex items-center gap-2">
                 <div className="rounded-full border border-black p-1">
                   <UserIcon size={20} />
                 </div>
                 <div>
                   <p className="flex gap-1 font-bold">
-                    Tên: <p className="font-medium">{user.name}</p>
+                    Tên: <span className="font-medium">{user.name}</span>
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="mt-4 flex items-center gap-2 md:mt-0">
                 <div className="rounded-full border border-black p-1">
                   <PhoneIcon size={20} />
                 </div>{' '}
                 <div>
                   <p className="flex gap-1 font-bold">
-                    SĐT nhận hàng: <p className="font-medium">{user.phone}</p>
+                    SĐT nhận hàng:{' '}
+                    <span className="font-medium">{user.phone}</span>
                   </p>
                 </div>
               </div>
