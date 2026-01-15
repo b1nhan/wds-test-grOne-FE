@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Upload, Save, Trash2 } from 'lucide-react';
 import { editProducts } from '@/lib/utils.products';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 const PopupEdit = ({ product, onClose, onSuccess, onDelete }) => {
   const [formData, setFormData] = useState({});
