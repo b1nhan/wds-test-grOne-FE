@@ -1,7 +1,7 @@
 import { Edit, Delete } from '@/components';
 import { deleteProducts } from '@/lib/utils.products';
 import { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 let Card = ({ product, onSuccessC }) => {
   let [showEdit, setShowEdit] = useState(false);
