@@ -8,11 +8,11 @@ import {
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { VNDformat } from '@/lib/utils';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { ShoppingCartIcon } from 'lucide-react';
 import { addCartItem } from '@/lib/utils.cart';
 import { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/(app)/product/$id')({
   component: RouteComponent,
@@ -32,14 +32,15 @@ export const Route = createFileRoute('/(app)/product/$id')({
 // stock,
 // updatedAt,
 function RouteComponent() {
+  const router = useRouter();
   const { product } = Route.useLoaderData();
   const [totalQuantity, setTotalQuantity] = useState(0);
   const handleQuantityChange = (newValue) => {
     setTotalQuantity(newValue);
   };
+
   return (
     <>
-      <Toaster />
       <header className="container mx-auto mt-16 grid gap-16 px-4 md:grid-cols-2">
         <figure className="bg-accent aspect-square w-full max-w-2xl rounded-md border object-cover p-32">
           <img
@@ -65,18 +66,31 @@ function RouteComponent() {
 
           <p className="text-muted-foreground">{product.description}</p>
 
-          <QuantityInput max={product.stock} onChange={handleQuantityChange} />
+          <QuantityInput
+            min={1}
+            max={product.stock}
+            onChange={handleQuantityChange}
+          />
 
           <Button
             size="lg"
             type="submit"
             className="my-4"
-            disabled={product.stock === 0}
+            disabled={totalQuantity <= 0}
             onClick={(e) => {
               e.preventDefault();
-              addCartItem(product.id, totalQuantity);
-              toast.success(`Đã thêm ${totalQuantity} sản phẩm vào giỏ hàng!`, {
-                duration: 4000,
+
+              addCartItem(product.id, totalQuantity).then((res) => {
+                if (res.success) {
+                  toast.success(
+                    `Đã thêm ${totalQuantity} sản phẩm vào giỏ hàng!`,
+                    {
+                      duration: 4000,
+                    },
+                  );
+
+                  router.invalidate();
+                }
               });
             }}
           >

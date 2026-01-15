@@ -73,14 +73,14 @@ export default function ProductSearchFilter({ onSearch, defaultKeyword = '' }) {
         />
 
         <InputGroupAddon align="end">
-          <InputGroupAddon>
-            <button
-              onClick={handleSearch}
-              className="flex cursor-pointer items-center justify-center hover:text-blue-600"
-            >
-              <SearchIcon />
-            </button>
-          </InputGroupAddon>
+          <InputGroupButton
+            onClick={handleSearch}
+            variant="ghost"
+            size="icon"
+            className="rounded-full"
+          >
+            <SearchIcon />
+          </InputGroupButton>
           <InputGroupButton
             variant="ghost"
             size="icon"
