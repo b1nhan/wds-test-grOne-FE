@@ -11,21 +11,33 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { logout } from '@/lib/utils.auth';
 import { cn } from '@/lib/utils';
+import { Badge } from './ui/badge';
 
-const LoggedIn = ({ user }) => {
+const LoggedIn = ({ user, cart }) => {
   const router = useRouter();
+
   return (
     <>
       <Link
         to="/cart"
-        className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+        className={cn(
+          buttonVariants({ variant: 'ghost', size: 'icon' }),
+          'relative',
+        )}
       >
+        {cart.data.length > 0 && (
+          <Badge
+            variant="destructive"
+            className="absolute top-0 right-0 size-4 rounded-full p-0 text-[10px]"
+          >
+            {cart.data.length}
+          </Badge>
+        )}
         <ShoppingCartIcon />
       </Link>
 
@@ -86,7 +98,8 @@ const NotLoggedIn = () => {
   );
 };
 const Navbar = ({ children, className }) => {
-  const { user } = useRouteContext({ from: '__root__' });
+  const { user, cart } = useRouteContext({ from: '__root__' });
+
   return (
     <header>
       <nav
@@ -103,7 +116,7 @@ const Navbar = ({ children, className }) => {
         </div>
 
         <div className="flex items-center gap-2">
-          {user ? <LoggedIn user={user} /> : <NotLoggedIn />}
+          {user ? <LoggedIn user={user} cart={cart} /> : <NotLoggedIn />}
         </div>
       </nav>
     </header>

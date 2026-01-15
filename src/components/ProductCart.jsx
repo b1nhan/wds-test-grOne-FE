@@ -2,9 +2,11 @@ import { VNDformat } from '@/lib/utils';
 import QuantityInput from './QuantityInput';
 import { updateCart, deleteCartItem } from '@/lib/utils.cart';
 import { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { Delete } from '@/components/';
+import { useRouter } from '@tanstack/react-router';
 let ProductCart = ({ item, setCart }) => {
+  const router = useRouter();
   const [showToaster, setShowToaster] = useState(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const handleQuantityChange = (newValue) => {
@@ -12,8 +14,6 @@ let ProductCart = ({ item, setCart }) => {
   };
 
   let handleDeleteCartItem = (itemId) => {
-    // if (!confirm('Xác nhận xóa sản phẩm?')) return;
-
     toast.promise(
       deleteCartItem(itemId),
       {
@@ -23,6 +23,7 @@ let ProductCart = ({ item, setCart }) => {
             setCart((prevItems) =>
               prevItems.filter((item) => item.product.id !== itemId),
             );
+            router.invalidate();
             return 'Xóa sản phẩm thành công!';
           } else {
             throw new Error('Xóa sản phẩm thất bại');
@@ -45,33 +46,23 @@ let ProductCart = ({ item, setCart }) => {
   const handleUpdateCartItem = async (itemId, quantity) => {
     if (quantity === item.quantity) return;
 
-    toast.promise(
-      updateCart(itemId, quantity),
-      {
-        loading: 'Đang cập nhật số lượng...',
-        success: (response) => {
-          if (response.success) {
-            setCart((prev) =>
-              prev.map((i) =>
-                i.product.id === itemId
-                  ? { ...i, quantity, totalPrice: i.product.price * quantity }
-                  : i,
-              ),
-            );
-            return 'Cập nhật số lượng thành công!';
-          } else {
-            throw new Error('Cập nhật thất bại');
-          }
-        },
-        error: (err) => err.message || 'Có lỗi xảy ra khi cập nhật',
-      },
-      {
-        duration: 3000,
-        style: {
-          minWidth: '250px',
-        },
-      },
-    );
+    updateCart(itemId, quantity)
+      .then((response) => {
+        if (response.success) {
+          setCart((prev) =>
+            prev.map((i) =>
+              i.product.id === itemId
+                ? { ...i, quantity, totalPrice: i.product.price * quantity }
+                : i,
+            ),
+          );
+
+          toast.success('Cập nhật số lượng thành công!');
+        } else {
+          throw new Error('Cập nhật thất bại');
+        }
+      })
+      .catch((err) => toast.error(err.message || 'Có lỗi xảy ra'));
   };
 
   useEffect(() => {
@@ -98,6 +89,7 @@ let ProductCart = ({ item, setCart }) => {
 
       <QuantityInput
         value={item.quantity}
+        min={1}
         max={item.product.stock}
         onChange={handleQuantityChange}
       />

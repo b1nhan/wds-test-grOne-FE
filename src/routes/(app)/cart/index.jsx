@@ -1,47 +1,26 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useState, useCallback } from 'react';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+import { useState } from 'react';
 import { VNDformat } from '@/lib/utils';
-import { getCart, deleteCartItem, updateCart } from '@/lib/utils.cart';
-import { getProfileDetail } from '@/lib/utils.auth';
 import ProductCart from '@/components/ProductCart';
-import toast, { Toaster } from 'react-hot-toast';
 import CheckoutPopup from '@/components/CheckoutPopup';
 import { useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/(app)/cart/')({
   component: RouteComponent,
-  loader: async () => {
-    const user = await getProfileDetail();
-    return { user };
+  beforeLoad: ({ context }) => {
+    // thoát nếu user chưa có log in
+    if (!context.user) {
+      throw redirect({ to: '/auth/login' });
+    }
   },
 });
 
 function RouteComponent() {
-  const loaderData = Route.useLoaderData();
-  const user = loaderData.user?.data || loaderData.user;
-  //
-  const [cartItems, setCartItems] = useState([]);
+  const { user, cart } = Route.useRouteContext();
+  const [cartItems, setCartItems] = useState(cart.data);
   const [isLoading, setLoading] = useState(false);
   const [isCheckoutOpen, setCheckoutOpen] = useState(false);
   const navigate = useNavigate();
-
-  const fetchCart = useCallback(async () => {
-    setLoading(true);
-    try {
-      const cart = await getCart();
-      if (cart.success) {
-        setCartItems(cart.data);
-      }
-    } catch (error) {
-      console.error('Lỗi khi lấy giỏ hàng:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
 
   const handleOrderSuccess = () => {
     setCheckoutOpen(false);
@@ -53,7 +32,6 @@ function RouteComponent() {
     return <div className="p-10 text-center">Đang tải giỏ hàng...</div>;
   return (
     <div className="flex h-full flex-col bg-white font-sans text-zinc-900">
-      <Toaster />
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col overflow-hidden px-4 py-8">
         <h1 className="mb-6 text-2xl font-bold tracking-tighter uppercase">
           Giỏ hàng của bạn
@@ -78,15 +56,21 @@ function RouteComponent() {
               <div className="text-right">Thao tác</div>
             </div>
 
-            <div className="min-h-[300px] divide-y divide-zinc-100">
-              {cartItems?.map((item) => (
-                <ProductCart
-                  key={item.product.id}
-                  item={item}
-                  setCart={setCartItems}
-                  loading={setLoading}
-                />
-              ))}
+            <div className="flex min-h-[300px] flex-col divide-y divide-zinc-100">
+              {cartItems?.length > 0 ? (
+                cartItems.map((item) => (
+                  <ProductCart
+                    key={item.product.id}
+                    item={item}
+                    setCart={setCartItems}
+                    loading={setLoading}
+                  />
+                ))
+              ) : (
+                <p className="text-muted-foreground m-auto">
+                  Giỏ hàng của bạn đang trống.
+                </p>
+              )}
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { X, Upload, Save } from 'lucide-react';
 import { createProducts } from '@/lib/utils.products';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const PopupCreate = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
