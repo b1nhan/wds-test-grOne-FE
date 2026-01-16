@@ -42,11 +42,11 @@ function RouteComponent() {
   return (
     <>
       <header className="container mx-auto mt-16 grid gap-16 px-4 md:grid-cols-2">
-        <figure className="bg-accent aspect-square w-full max-w-2xl rounded-md border object-cover p-32">
+        <figure className="bg-accent w-full max-w-2xl rounded-lg border p-2">
           <img
             src={product.imageUrl}
             alt={product.name}
-            className="h-full w-full"
+            className="aspect-square w-full rounded-md object-cover"
           />
         </figure>
 
@@ -59,9 +59,15 @@ function RouteComponent() {
             <span className="text-muted-foreground text-base font-normal">
               •
             </span>
-            <span className="text-muted-foreground text-base font-normal">
-              {product.stock} trong kho
-            </span>
+            {product.stock <= 0 ? (
+              <span className="text-muted-foreground text-base font-normal">
+                Hết hàng
+              </span>
+            ) : (
+              <span className="text-muted-foreground text-base font-normal">
+                {product.stock} trong kho
+              </span>
+            )}
           </p>
 
           <p className="text-muted-foreground">{product.description}</p>

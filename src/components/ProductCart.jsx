@@ -7,7 +7,9 @@ import { Delete } from '@/components/';
 import { useRouter } from '@tanstack/react-router';
 import { Button } from './ui/button';
 import { TrashIcon } from 'lucide-react';
-let ProductCart = ({ item, setCart }) => {
+import { Checkbox } from './ui/checkbox';
+
+let ProductCart = ({ item, setCart, isSelected, onSelect }) => {
   const router = useRouter();
   const [showToaster, setShowToaster] = useState(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
@@ -71,7 +73,13 @@ let ProductCart = ({ item, setCart }) => {
 
   // console.log(totalQuantity);
   return (
-    <div className="grid grid-cols-[8rem_1fr_1fr_1fr] grid-rows-[auto_1fr] items-center gap-x-8 gap-y-2 py-6">
+    <div className="grid grid-cols-[3rem_8rem_1fr_8rem_8rem] grid-rows-2 items-center gap-x-6 py-6">
+      <Checkbox
+        checked={isSelected}
+        onCheckedChange={onSelect}
+        className="row-span-2"
+      />
+
       <img
         src={item.product.imageUrl}
         alt={item.product.name}
@@ -80,7 +88,7 @@ let ProductCart = ({ item, setCart }) => {
 
       <h1 className="text-lg font-semibold">{item.product.name}</h1>
 
-      <div className="col-start-2 row-start-2 flex items-center gap-2 self-start">
+      <div className="col-start-3 flex items-center gap-2 self-start">
         <QuantityInput
           value={item.quantity}
           min={1}
@@ -97,11 +105,13 @@ let ProductCart = ({ item, setCart }) => {
         </Button>
       </div>
 
-      <p className="text-muted-foreground ml-auto">
+      <p className="text-muted-foreground row-span-2 ml-auto">
         {VNDformat(item.product.price)}
       </p>
 
-      <div className="ml-auto font-semibold">{VNDformat(item.totalPrice)}</div>
+      <div className="row-span-2 ml-auto font-semibold">
+        {VNDformat(item.totalPrice)}
+      </div>
 
       {showToaster && (
         <Delete

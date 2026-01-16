@@ -7,7 +7,6 @@ import {
   Link,
   useRouter,
   redirect,
-  useRouteContext,
 } from '@tanstack/react-router';
 import { use, useState } from 'react';
 
@@ -46,7 +45,7 @@ function RouteComponent() {
         router.navigate({ to: '/' });
       }
     } catch (err) {
-      setError(err.message);
+      setError(err);
     }
 
     setLoading(false);
@@ -69,6 +68,7 @@ function RouteComponent() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -78,6 +78,8 @@ function RouteComponent() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
+            // minlength="8"
           />
         </div>
         <p className="text-muted-foreground text-sm">

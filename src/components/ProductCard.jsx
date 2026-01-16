@@ -31,9 +31,15 @@ const ProductCard = ({ product }) => {
       <p className="inline-flex items-center gap-2 font-medium">
         {VNDformat(product.price)}
         <span className="text-muted-foreground text-sm font-normal">•</span>
-        <span className="text-muted-foreground text-sm font-normal">
-          {product.stock} trong kho
-        </span>
+        {product.stock <= 0 ? (
+          <span className="text-muted-foreground text-sm font-normal">
+            Hết hàng
+          </span>
+        ) : (
+          <span className="text-muted-foreground text-sm font-normal">
+            {product.stock} trong kho
+          </span>
+        )}
       </p>
     </Link>
   );

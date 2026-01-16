@@ -20,7 +20,6 @@ import { Badge } from './ui/badge';
 
 const LoggedIn = ({ user, cart }) => {
   const router = useRouter();
-
   return (
     <>
       <Link
@@ -30,12 +29,12 @@ const LoggedIn = ({ user, cart }) => {
           'relative',
         )}
       >
-        {cart.data.length > 0 && (
+        {cart.data.items.length > 0 && (
           <Badge
             variant="destructive"
             className="absolute top-0 right-0 size-4 rounded-full p-0 text-[10px]"
           >
-            {cart.data.length}
+            {cart.data.items.length}
           </Badge>
         )}
         <ShoppingCartIcon />

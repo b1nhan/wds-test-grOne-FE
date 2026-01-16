@@ -38,7 +38,7 @@ function RouteComponent() {
       await register({ email, password, phone, full_name: username });
       router.navigate({ to: '/' });
     } catch (err) {
-      setError(err.message);
+      setError(err);
     }
 
     setLoading(false);
@@ -61,6 +61,8 @@ function RouteComponent() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="Nhập email của bạn"
+            required
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -69,6 +71,8 @@ function RouteComponent() {
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            placeholder="Nhập tên của bạn"
+            required
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -77,6 +81,8 @@ function RouteComponent() {
             id="phone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            placeholder="Nhập số điện thoại của bạn"
+            required
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -86,6 +92,8 @@ function RouteComponent() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="Nhập mật khẩu"
+            required
           />
         </div>
         <p className="text-muted-foreground text-sm">
